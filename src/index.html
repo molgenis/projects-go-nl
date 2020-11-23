@@ -1,71 +1,93 @@
-<form id="browse-data" class="col-md-offset-3 col-md-6" style="background: #f6f6f6; padding: 1.5em; box-sizing: content-box;">
-    <legend>Browse Data</legend>
-    <p>Search counts of alternative alleles and genotypes.</p>
-    <div class="row">
-        <div class="form-group col-md-12">
-            <label for="chromosome" class="control-label">Chromosome</label>
-            <select class="form-control custom-select" id="chromosome">
-                <option>1</option>
-                <option>2</option>
-                <option>3</option>
-                <option>4</option>
-                <option>5</option>
-                <option>6</option>
-                <option>7</option>
-                <option>8</option>
-                <option>9</option>
-                <option>10</option>
-                <option>11</option>
-                <option>12</option>
-                <option>13</option>
-                <option>14</option>
-                <option>15</option>
-                <option>16</option>
-                <option>17</option>
-                <option>18</option>
-                <option>19</option>
-                <option>20</option>
-                <option>21</option>
-                <option>22</option>
-            </select>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-6 form-group" id="start-form">
-            <label for="start" class="control-label">Start position</label>
-            <input type="number" id="start" class="form-control" />
-            <span id="start-help-none" class="help-block" style="display:none">
-                Please specify the start position
-            </span>
-            <span id="start-help-negative" class="help-block" style="display:none">
-                Smalles position possible is 0
-            </span>
-        </div>
-        <div class="col-md-6 form-group" id="stop-form">
-            <label for="stop" class="control-label">Stop position</label>
-            <input type="number" id="stop" class="form-control" />
-            <span id="stop-help-none" class="help-block" style="display:none">
-                Please specify the stop position
-            </span>
-            <span id="stop-help-too-big" class="help-block" style="display:none">
-                Stop position exceeds max chromosome position of ~249,000,000
-            </span>
-            <span id="stop-help-smaller-than-start" class="help-block" style="display:none">
-                Stop position should be bigger than start position
-            </span>
-        </div>
-    </div>
-    <div class="row form-group">
-        <div class="col-sm-12">
-            <button type="submit" class="btn btn-default btn-primary" id="search">
-                <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
-                Search
-            </button>
-        </div>
-    </div>
-</form>
+<style type="text/css">
+	#browse-data-container {
+		display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: center;
+		-ms-flex-pack: center;
+		justify-content: center;
+    -webkit-box-align: center;
+		-ms-flex-align: center;
+		align-items: center;
+	}
+	#browse-data {
+		background: #f6f6f6;
+		padding: 1.5em;
+    -webkit-box-sizing: content-box;
+		box-sizing: content-box;
+	}
+</style>
+<div id="browse-data-container">
+	<form id="browse-data" class="col-sm-5">
+		<legend>Browse Data</legend>
+		<p>Search counts of alternative alleles and genotypes.</p>
+		<div class="row">
+			<div class="form-group col-md-12">
+				<label for="chromosome" class="control-label">Chromosome</label>
+				<select class="form-control custom-select" id="chromosome">
+					<option>1</option>
+					<option>2</option>
+					<option>3</option>
+					<option>4</option>
+					<option>5</option>
+					<option>6</option>
+					<option>7</option>
+					<option>8</option>
+					<option>9</option>
+					<option>10</option>
+					<option>11</option>
+					<option>12</option>
+					<option>13</option>
+					<option>14</option>
+					<option>15</option>
+					<option>16</option>
+					<option>17</option>
+					<option>18</option>
+					<option>19</option>
+					<option>20</option>
+					<option>21</option>
+					<option>22</option>
+				</select>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-6 form-group" id="start-form">
+				<label for="start" class="control-label">Start position</label>
+				<input type="number" id="start" class="form-control" />
+				<span id="start-help-none" class="help-block" style="display:none">
+					Please specify the start position
+				</span>
+				<span id="start-help-negative" class="help-block" style="display:none">
+					Smalles position possible is 0
+				</span>
+			</div>
+			<div class="col-md-6 form-group" id="stop-form">
+				<label for="stop" class="control-label">Stop position</label>
+				<input type="number" id="stop" class="form-control" />
+				<span id="stop-help-none" class="help-block" style="display:none">
+					Please specify the stop position
+				</span>
+				<span id="stop-help-too-big" class="help-block" style="display:none">
+					Stop position exceeds max chromosome position of ~249,000,000
+				</span>
+				<span id="stop-help-smaller-than-start" class="help-block" style="display:none">
+					Stop position should be bigger than start position
+				</span>
+			</div>
+		</div>
+		<div class="row form-group">
+			<div class="col-sm-12">
+				<button type="submit" class="btn btn-default btn-primary" id="search">
+					<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+					Search
+				</button>
+			</div>
+		</div>
+	</form>
+</div>
 <script type="text/javascript">
-    $("#search").click(function () {
+    $("#browse-data").on("submit", function(e) {
+		e.preventDefault();
         var chromosome = $('#chromosome').val();
         var start = $('#start').val();
         var stop = $('#stop').val();
@@ -73,7 +95,7 @@
         $("#start-form").removeClass("has-error");
         $(".help-block").css("display", "none");
         if ((stop && start) && (Number(stop) > Number(start)) && Number(stop) < 249000000 && Number(start) > -1) {
-            window.location.replace(`${window.location.protocol}//${window.location.host}/menu/main/dataexplorer?entity=gonl_chr${chromosome}&mod=data&filter=(POS=ge=${start};POS=le=${stop}`);
+            window.location.replace(`${window.location.protocol}//${window.location.host}/menu/main/dataexplorer?entity=gonl_chr${chromosome}&mod=data&filter=(POS=ge=${start};POS=le=${stop})`);
         } else if (start && !stop) {
             $("#stop-form").addClass("has-error");
             $("#stop-help-none").css("display", "inline");

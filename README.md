@@ -6,6 +6,8 @@ This repository contains the code used to update the GoNL MOLGENIS app. The moti
 
 ## Getting Started
 
+First, you will need to request access to internal servers (both data and GoNL). Contact your manager for more information.
+
 Several R scripts were created to build the EMX data model. These files are located in the `R` folder. Each file is responsible for creating a specific component for the EMX model. This allows elements of the model to be updated on-demand. To run these scripts, you will need to install Base R ([https://cran.r-project.org](https://cran.r-project.org)).
 
 Once R is installed, you will need the following R packages.
@@ -14,7 +16,7 @@ Once R is installed, you will need the following R packages.
 install.packages(c("dplyr", "jsonlite", "readr", "stringr"))
 ```
 
-In the main shell script `index.sh`, use the `Rscript` commands to generate the data files. For example, let's say that I want to update the entities EMX. First, make the required changes in the `R/emx_create_02_entities.R` files, and then run it using `Rscript`.
+In the main shell script `index.sh`, use the `Rscript` commands to generate the GoNL EMX data files. For example, let's say that I want to update the entities EMX. First, make the required changes in the `R/emx_create_02_entities.R` files, and then run it using `Rscript`.
 
 ```shell
 Rscript -e "source('R/emx_create_02_entities.R')"
