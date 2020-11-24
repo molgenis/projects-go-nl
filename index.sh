@@ -98,9 +98,9 @@ mcmd add logo -p src/images/gonl_logo.png
 mcmd make --role anonymous gonl_VIEWER
 # mcmd give anonymous view sys_md
 mcmd give anonymous view gonl
-mcmd give anonymous view navigator
-mcmd give anonymous view dataexplorer
-mcmd give anonymous view directory
+# mcmd give anonymous view navigator
+# mcmd give anonymous view dataexplorer
+# mcmd give anonymous view directory
 
 # 51243297
 # 16050607
