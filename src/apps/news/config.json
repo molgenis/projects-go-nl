@@ -1,0 +1,11 @@
+{
+    "label": "GoNL news",
+    "description": "GoNL news",
+    "version": "v1.0.0",
+    "apiDependency": "v2",
+    "name": "news",
+    "includeMenuAndFooter": true,
+    "runtimeOptions": {
+        "language": "en"
+    }
+}

@@ -1,0 +1,11 @@
+{
+    "label": "GoNL publications",
+    "description": "GoNL publications",
+    "version": "v1.0.0",
+    "apiDependency": "v2",
+    "name": "publications",
+    "includeMenuAndFooter": true,
+    "runtimeOptions": {
+        "language": "en"
+    }
+}

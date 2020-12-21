@@ -1,0 +1,11 @@
+{
+    "label": "GoNL Browse",
+    "description": "GoNL Browse",
+    "version": "v1.0.0",
+    "apiDependency": "v2",
+    "name": "browse",
+    "includeMenuAndFooter": true,
+    "runtimeOptions": {
+        "language": "en"
+    }
+}
