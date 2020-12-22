@@ -2,7 +2,7 @@
 # FILE: index.sh
 # AUTHOR: David Ruvolo
 # CREATED: 2020-11-18
-# MODIFIED: 2020-11-23
+# MODIFIED: 2020-12-22
 # PURPOSE: script for interacting with GONL Server
 # DEPENDENCIES: mcmd (molgenis commander); RScript
 # COMMENTS: https://go-nl-acc.gcc.rug.nl
@@ -38,15 +38,6 @@ Rscript -e "source('R/emx_create_04_static_content.R')"
 # //////////////////////////////////////
 
 # ~ 2 ~
-# Get Content
-
-# logo: download and optimize
-curl "http://www.nlgenome.nl/wp-content/uploads/2016/08/copy-logo2.png" -o src/images/gonl_logo.png
-open -a "ImageOptim" src/images/gonl_logo.png
-
-# //////////////////////////////////////
-
-# ~ 3 ~
 # Push to Molgenis Server
 
 # config `mcmd`
@@ -92,15 +83,33 @@ mcmd import -p gonl.chr22.snps_indels.r5.vcf --in gonl --as gonl_chr22 # done
 
 # push content
 mcmd import -p data/sys_StaticContent.tsv
-mcmd add logo -p src/images/gonl_logo.png
+
+mcmd add logo -p src/www/images/bgi.png
+mcmd add logo -p src/www/images/bmri.png
+mcmd add logo -p src/www/images/eumc.png
+mcmd add logo -p src/www/images/lumc.jpg
+mcmd add logo -p src/www/images/nbic.png
+mcmd add logo -p src/www/images/umcg.png
+mcmd add logo -p src/www/images/umcu.png
+mcmd add logo -p src/www/images/vumc.png
+mcmd add logo -p src/www/images/gonl.png
+
+# upload apps, add to menu, and then continue
+# menu order: Home, About, News, Publications, Download, Browse, Request
+# request is a redirect
+
+mcmd give anonymous view sys_App
+mcmd give anonymous view app-about
+mcmd give anonymous view app-news
+mcmd give anonymous view app-publications
+mcmd give anonymous view app-download
+mcmd give anonymous view app-browse
+
 
 # set permissions
 mcmd make --role anonymous gonl_VIEWER
 # mcmd give anonymous view sys_md
 mcmd give anonymous view gonl
-mcmd give anonymous view navigator
-mcmd give anonymous view dataexplorer
-mcmd give anonymous view directory
-
-# 51243297
-# 16050607
+# mcmd give anonymous view navigator
+# mcmd give anonymous view dataexplorer
+# mcmd give anonymous view directory

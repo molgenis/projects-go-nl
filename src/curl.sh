@@ -2,7 +2,7 @@
 # FILE: curl.sh
 # AUTHOR: David Ruvolo
 # CREATED: 2020-12-21
-# MODIFIED: 2020-12-21
+# MODIFIED: 2020-12-22
 # PURPOSE: curl old html pages
 # DEPENDENCIES: NA
 # COMMENTS: NA
@@ -25,3 +25,7 @@ curl http://www.nlgenome.nl/?p=154 -o src/pages/news_2014_03_14.html
 curl http://www.nlgenome.nl/?p=102 -o src/pages/news_2013_07_07.html
 curl http://www.nlgenome.nl/?p=79 -o src/pages/news_2013_07_03.html
 curl http://www.nlgenome.nl/?p=41 -o src/pages/news_2012_07_15.html
+
+# logo: download and optimize
+curl "http://www.nlgenome.nl/wp-content/uploads/2016/08/copy-logo2.png" -o src/www/images/gonl.png
+open -a "ImageOptim" src/www/images/gonl.png

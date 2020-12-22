@@ -1,4 +1,4 @@
-![Genome of the Netherlands proejct](src/images/gonl_logo.png)
+![Genome of the Netherlands proejct](src/www/images/gonl.png)
 
 # GoNL Molgenis Server
 
