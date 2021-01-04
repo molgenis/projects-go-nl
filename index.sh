@@ -55,7 +55,7 @@ mcmd import -p data/gonl_entities.tsv --as entities --in gonl
 
 # push source data
 # a shell script could be written, but it's probably just as easy to
-# import the files 1-by-1
+# import the files 1-by-1 to make sure they are all imported correctly
 cd vcfs/
 mcmd import -p gonl.chr1.snps_indels.r5.vcf --in gonl --as gonl_chr1 # done
 mcmd import -p gonl.chr2.snps_indels.r5.vcf --in gonl --as gonl_chr2 # done
@@ -80,10 +80,17 @@ mcmd import -p gonl.chr20.snps_indels.r5.vcf --in gonl --as gonl_chr20 # done
 mcmd import -p gonl.chr21.snps_indels.r5.vcf --in gonl --as gonl_chr21 # done
 mcmd import -p gonl.chr22.snps_indels.r5.vcf --in gonl --as gonl_chr22 # done
 
+# push questionnaire
+mcmd import -p data/questionnaire.xlsx --in requests
+mcmd enable rls requests_dar
+mcmd give anonymous view sys_Questionnaires
+mcmd give anonymous view questionnaires
+mcmd give anonymous view requests
 
 # push content
 mcmd import -p data/sys_StaticContent.tsv
 
+# cheeky way of uploading multiple images (make sure logo is always last)
 mcmd add logo -p src/www/images/bgi.png
 mcmd add logo -p src/www/images/bmri.png
 mcmd add logo -p src/www/images/eumc.png
@@ -92,6 +99,7 @@ mcmd add logo -p src/www/images/nbic.png
 mcmd add logo -p src/www/images/umcg.png
 mcmd add logo -p src/www/images/umcu.png
 mcmd add logo -p src/www/images/vumc.png
+mcmd add logo -p src/www/images/website.png
 mcmd add logo -p src/www/images/gonl.png
 
 # upload apps, add to menu, and then continue
