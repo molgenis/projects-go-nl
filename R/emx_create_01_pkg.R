@@ -16,13 +16,18 @@ suppressPackageStartupMessages(library(dplyr))
 #' Create Package data.frame
 #' Save as `.tsv` file
 data.frame(
-    id = "gonl",
-    label = "GoNL",
-    description = "Genome of the Netherlands",
-    idAttribute = FALSE,
-    labelAttribute = FALSE,
-    parent = "",
-    tags = ""
+    id = c(
+        "gonl",
+        "requests"
+    ),
+    label = c(
+        "GoNL",
+        "Data Requests"
+    ),
+    description = c(
+        "Genome of the Netherlands",
+        "All data access requests"
+    )
 ) %>%
     readr::write_tsv(
         x = .,

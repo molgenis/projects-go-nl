@@ -1,2 +1,3 @@
-id	label	description	idAttribute	labelAttribute	parent	tags
-gonl	GoNL	Genome of the Netherlands	FALSE	FALSE		
+id	label	description
+gonl	GoNL	Genome of the Netherlands
+requests	Data Requests	All data access requests
