@@ -2,20 +2,18 @@
 # FILE: index.sh
 # AUTHOR: David Ruvolo
 # CREATED: 2020-11-18
-# MODIFIED: 2020-12-22
+# MODIFIED: 2020-01-05
 # PURPOSE: script for interacting with GONL Server
 # DEPENDENCIES: mcmd (molgenis commander); RScript
-# COMMENTS: https://go-nl-acc.gcc.rug.nl
+# COMMENTS: NA
 # This script can be run at once, but it may be easier to use VSCode's
 # integrated terminal. Make sure a keybinding exists for:
 # `terminal run selected text in active terminal`. I recommend using
 # "cmd + shift + enter"
 # ////////////////////////////////////////////////////////////////////////////
 
-# download data: until access is granted, data must be downloaded manually
-# @ https://molgenis26.gcc.rug.nl/downloads/gonl_public/variants/release5/
-# download compressed files to ~/Downloads and then move to ./vcfs
 
+# download compressed files to ~/Downloads and then move to ./vcfs
 mv ~/Downloads/gonl.* vcfs/
 mkdir vcfs/gzip/
 
@@ -34,6 +32,7 @@ Rscript -e "source('R/emx_create_01_pkg.R')"
 Rscript -e "source('R/emx_create_02_entities.R')"
 Rscript -e "source('R/emx_create_03_attribs.R')"
 Rscript -e "source('R/emx_create_04_static_content.R')"
+Rscript -e "source('R/emx_create_05_questionnaire.R')"
 
 # //////////////////////////////////////
 
@@ -80,12 +79,13 @@ mcmd import -p gonl.chr20.snps_indels.r5.vcf --in gonl --as gonl_chr20 # done
 mcmd import -p gonl.chr21.snps_indels.r5.vcf --in gonl --as gonl_chr21 # done
 mcmd import -p gonl.chr22.snps_indels.r5.vcf --in gonl --as gonl_chr22 # done
 
-# push questionnaire
-mcmd import -p data/questionnaire.xlsx --in requests
+# import questionnaire and give permissions
+mcmd import -p data/dar_questionnaire.xlsx --in requests
 mcmd enable rls requests_dar
-mcmd give anonymous view sys_Questionnaires
+
 mcmd give anonymous view questionnaires
-mcmd give anonymous view requests
+mcmd give anonymous edit requests_dar
+mcmd make --role ANONYMOUS requests_EDITOR
 
 # push content
 mcmd import -p data/sys_StaticContent.tsv
