@@ -1,0 +1,11 @@
+{
+    "label": "GoNL request",
+    "description": "GoNL request",
+    "version": "v1.0.0",
+    "apiDependency": "v2",
+    "name": "request",
+    "includeMenuAndFooter": true,
+    "runtimeOptions": {
+        "language": "en"
+    }
+}
