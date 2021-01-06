@@ -2,7 +2,7 @@
 # FILE: index.sh
 # AUTHOR: David Ruvolo
 # CREATED: 2020-11-18
-# MODIFIED: 2020-01-05
+# MODIFIED: 2020-01-06
 # PURPOSE: script for interacting with GONL Server
 # DEPENDENCIES: mcmd (molgenis commander); RScript
 # COMMENTS: NA
@@ -100,6 +100,7 @@ mcmd add logo -p src/www/images/umcg.png
 mcmd add logo -p src/www/images/umcu.png
 mcmd add logo -p src/www/images/vumc.png
 mcmd add logo -p src/www/images/website.png
+mcmd add logo -p src/www/images/GoNL_DataSources_Flowchart_04.png
 mcmd add logo -p src/www/images/gonl.png
 
 # upload apps, add to menu, and then continue
