@@ -85,7 +85,7 @@ mcmd enable rls requests_dar
 
 mcmd give anonymous view questionnaires
 mcmd give anonymous edit requests_dar
-mcmd make --role ANONYMOUS requests_EDITOR
+# mcmd make --role ANONYMOUS requests_EDITOR
 
 # push content
 mcmd import -p data/sys_StaticContent.tsv
@@ -112,7 +112,9 @@ mcmd give anonymous view app-news
 mcmd give anonymous view app-publications
 mcmd give anonymous view app-download
 mcmd give anonymous view app-browse
+mcmd give anonymous view app-request
 
+mcmd give anonymous view sys_FileMeta
 
 # set permissions
 mcmd make --role anonymous gonl_VIEWER
