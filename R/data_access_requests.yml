@@ -1,0 +1,140 @@
+name: requests
+label: Data Access Requests
+description: emx model for creating the 'requests' package
+options:
+  dataType: string
+  nillable: true
+  visible: true
+  idAttribute: "false"
+entities:
+  - name: yesno
+    label: yesno
+    description: reference entity for categorical inputs
+    attributes:
+      - name: id
+        label: id
+        idAttribute: "true"
+      - name: label
+        label: label
+    data:
+      - id: Yes
+        label: Yes
+      - id: No
+        label: No
+  - name: datasets
+    label: datasets
+    description: input labels for dataset selection
+    attributes:
+      - name: id
+        label: id
+        idAttribute: "true"
+      - name: sortOrder
+        label: sortOrder
+        dataType: int
+    data:
+      - id: SNV calls (498 unrelated parents and 249 children)
+        sortOrder: 0
+      - id: INDEL calls (498 unrelated parents and 249 children)
+        sortOrder: 1
+      - id: Imputation-ready haplotypes (SNVs + INDELs) (998 haplotypes)
+        sortOrder: 2
+      - id: SV calls (> 20bp)
+        sortOrder: 3
+      - id: trio-BAM files (249 trios, 498 unrelated parents, 249 children)
+        sortOrder: 4
+      - id: unaligned fastq files (750 samples)
+        sortOrder: 5
+      - id: Other
+        sortOrder: 6
+  - name: dar
+    label: Data Access Requests
+    description: GoNL Data Access Requests
+    attributes:
+      - name: id
+        label: id
+        idAttribute: "auto"
+      - name: applicant
+        label: Applicant Information
+        description: Please provide contact details for the applicant and all additional applicants if applicable.
+        dataType: compound
+      - name: name
+        label: Name
+        partOfAttribute: applicant
+      - name: email
+        label: Email
+        dataType: email
+        partOfAttribute: applicant
+      - name: affiliation
+        label: Affiliation
+        description: Employment or affiliation with any organization
+        partOfAttribute: applicant
+      - name: collaborators
+        label: Additional applicants
+        description: Enter information for all additional applicants. Please ensure that a full postal and email is included for each applicant.
+        dataType: text
+        partOfAttribute: applicant
+      - name: research
+        label: Research Study
+        dataType: compound
+      - name: researchTitle
+        label: Study Title
+        description: Enter the name of your study (less than 30 words)
+        partOfAttribute: research
+      - name: researchQuestion
+        label: Research Question
+        description: Please describe the study in no more than 750 words. Include a) outline of the study design; b) an indication of the methodologies to be used; c) proposed use of the Project Data; d) preceding peer-reviews of the study (if any present); e) specific details of what you plan to do with the Project Data; f) timeline; g) key references.
+        dataType: text
+        partOfAttribute: research
+      - name: consent
+        label: Consent and Approvals
+        dataType: compound
+      - name: hasConsent
+        label: Do you have approval to carry out the proposed research?
+        description: If your proposed use of Project Data involves use of your own data, please confirm that you have obtained all approvals required by the rules and regulations of your jurisdiction, including your institution’s institutional rules, and the consent of your data subjects, for your use of your own data in the study, by ticking the following box.
+        dataType: categorical
+        refEntity: yesno
+        partOfAttribute: consent
+      - name: consentInfo
+        label: Please specify official IRB or METc
+        dataType: text
+        partOfAttribute: consent
+        visible: $('consent_status').eq('Yes').value()
+      - name: data
+        label: Data
+        dataType: compound
+      - name: dataRequested
+        label: Data Requested
+        description: Indicate the data that is Select all that apply. Twin data cannot be requested in light of privacy concerns. Age, sex and family structure is included in the data access.
+        dataType: categorical_mref
+        partOfAttribute: data
+        refEntity: datasets
+      - name: dataOther
+        label: Other data required
+        description: Please describe below
+        dataType: text
+        partOfAttribute: data
+        visible: $('data_requested').value().indexOf('Other') > -1
+      - name: resources
+        label: Resources, Feasibility & Expertise
+        dataType: compound
+      - name: hasFunding
+        label: Do you have funding to carry out the proposed research?
+        description: Please confirm that you have secured funding for your proposed use of the Project Data and that you will carry out your research within a reasonable period of time after the granting of this application
+        dataType: categorical
+        partOfAttribute: resources
+        refEntity: yesno
+      - name: experience
+        label: Research Experience
+        description: Please describe your experience and expertise, and that of your collaborators, and how this will be applied to the proposed study
+        dataType: text
+        partOfAttribute: research
+      - name: publications
+        label: Publications
+        description: Please provide a list of recent publications (max 10)
+        dataType: text
+        partOfAttribute: resources
+      - name: hasAgreed
+        label: Have you read and agree to the GoNL data acess agreement?
+        description: Please declare that you have read and agree to abide by the terms and conditions outlined in the GoNL data access agreement (which you will need to sign on approval of this project)
+        dataType: categorical
+        refEntity: yesno

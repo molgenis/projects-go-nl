@@ -1,0 +1,21 @@
+name	label	idAttribute	description	dataType	partOfAttribute	refEntity	visible
+id	id	auto	NA	string	NA	NA	TRUE
+applicant	Applicant Information	false	Please provide contact details for the applicant and all additional applicants if applicable.	compound	NA	NA	TRUE
+name	Name	false	NA	string	applicant	NA	TRUE
+email	Email	false	NA	email	applicant	NA	TRUE
+affiliation	Affiliation	false	Employment or affiliation with any organization	string	applicant	NA	TRUE
+collaborators	Additional applicants	false	Enter information for all additional applicants. Please ensure that a full postal and email is included for each applicant.	text	applicant	NA	TRUE
+research	Research Study	false	NA	compound	NA	NA	TRUE
+researchTitle	Study Title	false	Enter the name of your study (less than 30 words)	string	research	NA	TRUE
+researchQuestion	Research Question	false	Please describe the study in no more than 750 words. Include a) outline of the study design; b) an indication of the methodologies to be used; c) proposed use of the Project Data; d) preceding peer-reviews of the study (if any present); e) specific details of what you plan to do with the Project Data; f) timeline; g) key references.	text	research	NA	TRUE
+consent	Consent and Approvals	false	NA	compound	NA	NA	TRUE
+hasConsent	Do you have approval to carry out the proposed research?	false	If your proposed use of Project Data involves use of your own data, please confirm that you have obtained all approvals required by the rules and regulations of your jurisdiction, including your institution’s institutional rules, and the consent of your data subjects, for your use of your own data in the study, by ticking the following box.	categorical	consent	yesno	TRUE
+consentInfo	Please specify official IRB or METc	false	NA	text	consent	NA	$('consent_status').eq('Yes').value()
+data	Data	false	NA	compound	NA	NA	TRUE
+dataRequested	Data Requested	false	Indicate the data that is Select all that apply. Twin data cannot be requested in light of privacy concerns. Age, sex and family structure is included in the data access.	categorical_mref	data	datasets	TRUE
+dataOther	Other data required	false	Please describe below	text	data	NA	$('data_requested').value().indexOf('Other') > -1
+resources	Resources, Feasibility & Expertise	false	NA	compound	NA	NA	TRUE
+hasFunding	Do you have funding to carry out the proposed research?	false	Please confirm that you have secured funding for your proposed use of the Project Data and that you will carry out your research within a reasonable period of time after the granting of this application	categorical	resources	yesno	TRUE
+experience	Research Experience	false	Please describe your experience and expertise, and that of your collaborators, and how this will be applied to the proposed study	text	research	NA	TRUE
+publications	Publications	false	Please provide a list of recent publications (max 10)	text	resources	NA	TRUE
+hasAgreed	Have you read and agree to the GoNL data acess agreement?	false	Please declare that you have read and agree to abide by the terms and conditions outlined in the GoNL data access agreement (which you will need to sign on approval of this project)	categorical	NA	yesno	TRUE

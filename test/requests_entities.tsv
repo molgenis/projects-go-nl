@@ -1,0 +1,4 @@
+name	label	description
+yesno	yesno	reference entity for categorical inputs
+datasets	datasets	input labels for dataset selection
+dar	Data Access Requests	GoNL Data Access Requests
