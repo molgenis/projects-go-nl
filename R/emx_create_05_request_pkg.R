@@ -1,8 +1,8 @@
 #'////////////////////////////////////////////////////////////////////////////
-#' FILE: emx_create_05_questionnaire.R
+#' FILE: emx_create_05_requests_pkg.R
 #' AUTHOR: David Ruvolo
 #' CREATED: 2021-01-05
-#' MODIFIED: 2021-01-05
+#' MODIFIED: 2021-01-12
 #' PURPOSE: create EMX for data access request questionnaire
 #' STATUS: complete
 #' PACKAGES: openxlsx, dplyr, htmltools
@@ -15,8 +15,10 @@ suppressPackageStartupMessages(library(htmltools))
 
 # create new workbook
 wb <- openxlsx::createWorkbook()
-openxlsx::addWorksheet(wb, sheetName = "entities")
-openxlsx::addWorksheet(wb, sheetName = "attributes")
+openxlsx::addWorksheet(wb, "entities")
+openxlsx::addWorksheet(wb, "attributes")
+openxlsx::addWorksheet(wb, "yesno")
+openxlsx::addWorksheet(wb, "datasets")
 
 
 # function to collapse shiny tags to html string
@@ -31,95 +33,70 @@ as_html_string <- function(...) {
 #'//////////////////////////////////////
 
 #' ~ 1 ~
-#' Create 'entities' worksheet
+#' Create `entities` worksheets
 
-data.frame(
-    name = "dar",
-    label = "GoNL Data Access Request",
-    description = as_html_string(
-        tags$p(
-            "Individual level sequence data and/or variant calls can be",
-            "requested as follows."
-        ),
-        tags$ol(
-            tags$li(
-                "Fill in the GoNL Data Access Request form. For questions",
-                "email",
-                tags$a(
-                    href = "mailto:gonl@bbmri.nl",
-                    "gonl@bbmri.nl"
-                )
-            ),
-            tags$li(
-                "Your research request will be evaluated by the GoNL steering",
-                "committee"
-            ),
-            tags$li(
-                "If positive, you will receive a ",
-                tags$a(
-                    href = "/api/files/aaaac5wm2w4d4ascvqkqabqaae?alt=media",
-                    "data access agreement",
-                    .noWS = "outside"
-                ),
-                "to be signed"
-            ),
-            tags$li(
-                "You will be granted access to the data using a suitable method"
-            ),
-            tags$li("At publication add suitable acknowledgement")
-        )
-    ),
-    extends = "sys_Questionnaire"
-) %>%
-    openxlsx::writeData(wb, sheet = "entities", x = .)
+entities <- data.frame(
+    name = c("dar", "yesno", "datasets"),
+    label = c("Data Access Requests", "YesNo", "Datasets"),
+    description = c(
+        "All requests for the GoNL data",
+        "Input label reference entity",
+        "Input labels for dataset selection"
+    )
+)
+openxlsx::writeData(wb, sheet = "entities", x = entities)
 
 #'//////////////////////////////////////
 
 #' ~ 2 ~
 #' Create `attributes` worksheet
 
-data.frame(
+#' ~ 2a ~
+# create basic structure, and row bind other entries
+attribs <- c(
+    entity = "dar",
     name = "id",
     label = "id",
     description = "unique identifier",
     dataType = "string",
-    partOfAttribute = ""
-) %>%
-    bind_rows(
+    idAttribute = "AUTO",
+    nillable = "FALSE"
+)
 
-        # applicant information
-        data.frame(
+
+#' ~ 2b ~
+# define applicant information
+attribs <- attribs %>%
+    bind_rows(
+        c(
             name = "applicant",
             label = "Applicant Information",
             description = paste0(
-                "Please provide contact details for the applicant and any ",
-                "additional applicants (if applicable)."
+                "Please provide contact details for the applicant and all ",
+                "additional applicants if applicable."
             ),
-            dataType = "compound",
-            partOfAttribute = ""
+            dataType = "compound"
         ),
-        data.frame(
+        c(
             name = "applicant_name",
             label = "Name",
-            description = "",
             dataType = "string",
             partOfAttribute = "applicant"
         ),
-        data.frame(
+        c(
             name = "applicant_email",
             label = "Email",
-            description = "",
             dataType = "email",
             partOfAttribute = "applicant"
         ),
-        data.frame(
+        c(
             name = "applicant_affiliation",
             label = "Affiliation",
             description = "Employment or affiliation with any organization",
             dataType = "string",
             partOfAttribute = "applicant"
         ),
-        data.frame(
+        c(
             name = "applicant_collaborators",
             label = "Additional Applicants",
             description = paste0(
@@ -128,23 +105,26 @@ data.frame(
             ),
             dataType = "text",
             partOfAttribute = "applicant"
-        ),
+        )
+    )
 
-        # information about the research study
-        data.frame(
+#' ~ 2c ~
+#' Information about the Research Study
+attribs <- attribs %>%
+    bind_rows(
+        c(
             name = "research",
             label = "Research Study",
-            description = "",
             dataType = "compound"
         ),
-        data.frame(
+        c(
             name = "research_title",
             label = "Study Title",
             description = "Enter the name of your study (less than 30 words)",
             dataType = "string",
             partOfAttribute = "research"
         ),
-        data.frame(
+        c(
             name = "research_question",
             label = "Research Question",
             description = paste0(
@@ -157,16 +137,19 @@ data.frame(
             ),
             dataType = "text",
             partOfAttribute = "research"
-        ),
+        )
+    )
 
-        # consent information
-        data.frame(
+#' ~ 2d ~
+#' Define Consent Attributes
+attribs <- attribs %>%
+    bind_rows(
+        c(
             name = "consent",
             label = "Consent and Approvals",
-            description = "",
             dataType = "compound"
         ),
-        data.frame(
+        c(
             name = "consent_status",
             label = "Do you have approval to carry out the proposed research?",
             description = paste0(
@@ -177,96 +160,61 @@ data.frame(
                 " consent of your data subjects, for your use of your own data",
                 " in the study, by ticking the following box."
             ),
-            dataType = "bool",
-            partOfAttribute = "consent"
+            dataType = "categorical",
+            partOfAttribute = "consent",
+            refEntity = "yesno"
         ),
-        data.frame(
+        c(
             name = "consent_info",
             label = "Please specify official IRB or METc",
-            description = "",
             dataType = "text",
-            partOfAttribute = "consent"
-        ),
+            partOfAttribute = "consent",
+            visible = "$('consent_status').eq('Yes').value()"
+        )
+    )
 
-        # data requested
-        data.frame(
+#' ~ 2e ~
+#' Define datasets attributes
+attribs <- attribs %>%
+    bind_rows(
+        c(
             name = "data",
-            label = "Data Requested",
+            label = "Data",
+            dataType = "compound"
+        ),
+        c(
+            name = "data_requested",
+            label = "Datasets Requested",
             description = paste0(
                 "Indicate the data that is ",
                 "Select all that apply. Twin data cannot be requested in ",
                 "light of privacy concerns. Age, sex and family structure is ",
                 "included in the data access."
             ),
-            dataType = "compound",
-            partOfAttribute = ""
+            dataType = "categorical_mref",
+            partOfAttribute = "data",
+            refEntity = "datasets"
         ),
-        data.frame(
-            name = "data_snv",
-            label = "SNV calls",
-            description = "498 unrelated parents and 249 children",
-            dataType = "bool",
-            partOfAttribute = "data"
-        ),
-        data.frame(
-            name = "data_indel",
-            label = "INDEL Calls",
-            description = "498 unrelated parents and 249 children",
-            dataType = "bool",
-            partOfAttribute = "data"
-        ),
-        data.frame(
-            name = "data_haplotypes",
-            label = "Haplotypes",
-            description = "SNVs and INDELS (998 haplotypes)",
-            dataType = "bool",
-            partOfAttribute = "data"
-        ),
-        data.frame(
-            name = "data_svCalls",
-            label = "SV Calls",
-            description = "> 20bp",
-            dataType = "bool",
-            partOfAttribute = "data"
-        ),
-        data.frame(
-            name = "data_trioBamFiles",
-            label = "trio-BAM files",
-            description = "249 trios, 498 unrelated parents, 249 children",
-            dataType = "bool",
-            partOfAttribute = "data"
-        ),
-        data.frame(
-            name = "data_fastq",
-            label = "Unaligned fastq files",
-            description = "750 samples",
-            dataType = "bool",
-            partOfAttribute = "data"
-        ),
-        data.frame(
-            name = "data_other",
-            label = "Other",
-            description = "",
-            dataType = "bool",
-            partOfAttribute = "data"
-        ),
-        data.frame(
+        c(
             name = "data_other_info",
             label = "Other data required",
             description = "Please describe below",
             dataType = "text",
-            partOfAttribute = "data"
-        ),
+            partOfAttribute = "data",
+            visible = "$('data_requested').value().indexOf('Other') > -1"
+        )
+    )
 
-        # Resources, Feasibility & Expertise
-        data.frame(
+#' ~ 2f ~
+#' Resources, Feasibility & Expertise
+attribs <- attribs %>%
+    bind_rows(
+        c(
             name = "resources",
             label = "Resources, Feasibility & Expertise",
-            description = "",
-            dataType = "compound",
-            partOfAttribute = ""
+            dataType = "compound"
         ),
-        data.frame(
+        c(
             name = "resources_hasFunding",
             label = "Do you have funding to carry out the proposed research?",
             description = paste0(
@@ -275,10 +223,11 @@ data.frame(
                 "out your research within a reasonable period of time after ",
                 "the granting of this application"
             ),
-            dataType = "bool",
-            partOfAttribute = "resources"
+            dataType = "categorical",
+            partOfAttribute = "resources",
+            refEntity = "yesno"
         ),
-        data.frame(
+        c(
             name = "resources_experience",
             label = "Research Experience",
             description = paste0(
@@ -289,7 +238,7 @@ data.frame(
             dataType = "text",
             partOfAttribute = "resources"
         ),
-        data.frame(
+        c(
             name = "resources_pubs",
             label = "Publications",
             description = paste0(
@@ -297,15 +246,19 @@ data.frame(
             ),
             dataType = "text",
             partOfAttribute = "resources"
-        ),
-        data.frame(
+        )
+    )
+
+#' ~ 2g ~
+#' Agreement
+attribs <- attribs %>%
+    bind_rows(
+        c(
             name = "agreement",
             label = "Acess Conditions",
-            description = "",
-            dataType = "compound",
-            partOfAttribute = ""
+            dataType = "compound"
         ),
-        data.frame(
+        c(
             name = "agreement_status",
             label = "Have you read and agree to the GoNL data acess agreement?",
             description = paste0(
@@ -314,36 +267,125 @@ data.frame(
                 "agreement (which you will need to sign on approval of this ",
                 "project)"
             ),
-            dataType = "bool",
-            partOfAttribute = "agreement"
+            dataType = "categorical",
+            partOfAttribute = "agreement",
+            refEntity = "yesno"
         )
-    ) %>%
+    )
+
+#' ~ 2i ~
+#' Add entity `requests_datasets`
+attribs <- attribs %>%
+    bind_rows(
+        data.frame(
+            entity = "datasets",
+            name = c("id", "label", "sortOrder"),
+            label = c("id", "label", "sortOrder"),
+            dataType = c("string", "string", "int"),
+            idAttribute = c("TRUE", "FALSE", "FALSE"),
+            nillable = c("FALSE", "FALSE", "FALSE")
+        )
+    )
+
+
+#' ~ 2j ~
+#' Add entity `requests_yes_no`
+attribs <- attribs %>%
+    bind_rows(
+        data.frame(
+            entity = "yesno",
+            name = c("id", "label"),
+            label = c("id", "label"),
+            dataType = c("string", "string"),
+            idAttribute = c("TRUE", "FALSE"),
+            nillable = c("FALSE", "FALSE")
+        )
+    )
+
+#' ~ 2k ~
+#' Clean
+attribs <- attribs %>%
     mutate(
-        entity = "dar",
-        visible = case_when(
-            name == "consent_info" ~ "$('consent_status').eq(true).value()",
-            name == "data_other_info" ~ "$('data_other').eq(true).value()"
+        entity = case_when(
+            is.na(entity) ~ "dar",
+            TRUE ~ as.character(entity)
+        ),
+        entity = factor(
+            entity,
+            c(
+                "datasets",
+                "yesno",
+                "dar"
+            )
+        ),
+        description = tidyr::replace_na(description, ""),
+        idAttribute = case_when(
+            is.na(idAttribute) ~ "FALSE",
+            TRUE ~ as.character(idAttribute)
         ),
         nillable = case_when(
-            name == "id" ~ FALSE
+            is.na(nillable) ~ TRUE,
+            TRUE ~ as.logical(nillable)
         ),
-        idAttribute = case_when(
-            name == "id" ~ "AUTO"
-        )
+        visible = case_when(
+            is.na(visible) ~ "TRUE",
+            TRUE ~ as.character(visible)
+        ),
+        partOfAttribute = tidyr::replace_na(partOfAttribute, "")
     ) %>%
     select(
         entity, name, label, description, dataType,
-        idAttribute, nillable, visible, partOfAttribute
+        idAttribute, nillable, visible,
+        partOfAttribute, refEntity
     ) %>%
-    openxlsx::writeData(wb, sheet = "attributes", x = .)
+    arrange(entity)
+    
+
+openxlsx::writeData(wb, sheet = "attributes", x = attribs)
 
 #'//////////////////////////////////////
 
 #' ~ 3 ~
+#' create reference entities
+
+#' ~ 3a ~
+# Options for selecting datasets
+data.frame(
+    id = c(
+        "SNV calls",
+        "INDEL calls",
+        "Imputation-ready haplotypes",
+        "SV calls",
+        "trio-BAM files",
+        "unaligned fastq files",
+        "Other"
+    ),
+    label = c(
+        "SNV calls (498 unrelated parents and 249 children)",
+        "INDEL calls (498 unrelated parents and 249 children)",
+        "Imputation-ready haplotypes (SNVs + INDELs) (998 haplotypes)",
+        "SV calls (> 20bp)",
+        "trio-BAM files (249 trios, 498 unrelated parents, 249 children)",
+        "unaligned fastq files (750 samples)",
+        "Other, describe below"
+    )
+) %>%
+    mutate(sortOrder = seq_len(length(label)) - 1) %>%
+    select(id, label, sortOrder) %>%
+    openxlsx::writeData(wb, "datasets", x = .)
+
+#' ~ 3b ~
+# labels for Yes or No categorical input
+data.frame(id = c("Yes", "No"), label = c("Yes", "No")) %>%
+    openxlsx::writeData(wb, "yesno", x = .)
+
+#'//////////////////////////////////////
+
+#' ~ 4 ~
 #' Write data
 
 openxlsx::saveWorkbook(
     wb = wb,
-    file = "data/dar_questionnaire.xlsx",
+    file = "data/emx_data_access_requests.xlsx",
     overwrite = TRUE
 )

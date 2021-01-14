@@ -2,7 +2,7 @@
 # FILE: index.sh
 # AUTHOR: David Ruvolo
 # CREATED: 2020-11-18
-# MODIFIED: 2020-01-06
+# MODIFIED: 2020-01-11
 # PURPOSE: script for interacting with GONL Server
 # DEPENDENCIES: mcmd (molgenis commander); RScript
 # COMMENTS: NA
@@ -32,7 +32,7 @@ Rscript -e "source('R/emx_create_01_pkg.R')"
 Rscript -e "source('R/emx_create_02_entities.R')"
 Rscript -e "source('R/emx_create_03_attribs.R')"
 Rscript -e "source('R/emx_create_04_static_content.R')"
-Rscript -e "source('R/emx_create_05_questionnaire.R')"
+Rscript -e "source('R/emx_create_05_request_pkg.R')"
 
 # //////////////////////////////////////
 
@@ -80,10 +80,10 @@ mcmd import -p gonl.chr21.snps_indels.r5.vcf --in gonl --as gonl_chr21 # done
 mcmd import -p gonl.chr22.snps_indels.r5.vcf --in gonl --as gonl_chr22 # done
 
 # import questionnaire and give permissions
-mcmd import -p data/dar_questionnaire.xlsx --in requests
-mcmd enable rls requests_dar
+mcmd import -p data/emx_data_access_requests.xlsx --in requests
+# mcmd enable rls requests_dar
 
-mcmd give anonymous view questionnaires
+mcmd give anonymous view data-row-edit
 mcmd give anonymous edit requests_dar
 # mcmd make --role ANONYMOUS requests_EDITOR
 
