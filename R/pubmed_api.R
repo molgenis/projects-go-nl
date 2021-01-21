@@ -2,78 +2,35 @@
 #' FILE: pubmed_api.R
 #' AUTHOR: David Ruvolo
 #' CREATED: 2021-01-20
-#' MODIFIED: 2021-01-20
+#' MODIFIED: 2021-01-21
 #' PURPOSE: source publications list from pubmed
 #' STATUS: in.progress
-#' PACKAGES: easypubmed
+#' PACKAGES: *see below*
 #' COMMENTS: NA
 #'////////////////////////////////////////////////////////////////////////////
 
 #' pkgs
-#' install.packages("easyPubMed")
-#' install.packages("htmltools")
+#' install.packages("dplyr")
+#' install.packages("httr")
+#' install.packages("rjson")
+#' install.packages("cli")
+#' install.packages("purrr")
+#' install.packages("tibble")
 #' install.packages("rlist")
+#' install.packages("htmltools")
 
-#' run publication query
-q <- "\"Genome of The Netherlands Consortium\"[Author - Corporate]"
-pub_ids <- easyPubMed::get_pubmed_ids(q)
-pub_raw <- easyPubMed::fetch_pubmed_data(pub_ids)
-pub_df <- easyPubMed::table_articles_byAuth(
-    pubmed_data = pub_raw,
-    getKeywords = FALSE,
-    included_authors = "all",
-    autofill = FALSE
-)
+#' test packages
+packageVersion("dplyr")
+packageVersion("httr")
+packageVersion("rjson")
+packageVersion("cli")
+packageVersion("purrr")
+packageVersion("tibble")
+packageVersion("rlist")
+packageVersion("htmltools")
 
-
-pub_raw_ids <- easyPubMed::custom_grep(pub_raw, "PMID")
-pub_raw_aucorp <- easyPubMed::custom_grep(pub_raw, "Author", format = "char")
-
-#' reduce dataset
-df <- pub_df %>%
-    select(pmid, doi, title, year, jabbrv, journal, lastname, firstname) %>%
-    group_by(pmid) %>%
-    mutate(
-        authors = paste0(
-            lastname, ", ",
-            substring(firstname, 1, 1),
-            collapse = "; "
-        )
-    ) %>%
-    select(-lastname, -firstname) %>%
-    distinct(pmid, .keep_all = TRUE)
-
-#' generate html
-html <- lapply(
-    seq_len(NROW(df)),
-    function(d) {
-        htmltools::tags$li(
-            class = "pub",
-            htmltools::tags$span(
-                class = "pub-data pub-title",
-                df[d, c("title")]
-            ),
-            htmltools::tags$span(
-                class = "pub-data pub-year",
-                df[d, c("year")]
-            ),
-            htmltools::tags$span(
-                class = "pub-data pub-authors",
-                df[d, c("authors")]
-            ),
-            htmltools::tags$span(
-                class = "pub-data pub-journal",
-                df[d, c("journal")]
-            ),
-            htmltools::tags$span(
-                class = "pub-data pub-doi",
-                df[d, c("doi")]
-            )
-        )
-    }
-)
-
-
+#' load pkgs for current script
+suppressPackageStartupMessages(library(dplyr))
 
 #' pubmed
 #'
@@ -134,8 +91,34 @@ pubmed$get_ids <- function(query) {
 #' @examples
 #'
 #' @export
-pubmed$get_metadata <- function(ids) {
-    
+pubmed$get_metadata <- function(ids, delay = 0.5) {
+    out <- NA
+    purrr::imap(ids, function(.x, .y) {
+        response <- pubmed$make_request(.x)
+        if (response$status_code == 200) {
+            raw <- httr::content(response, as = "text", encoding = "UTF-8")
+            result <- rjson::fromJSON(raw)
+            df <- pubmed$clean_request(result)
+            if (NROW(df) > 0) {
+                cli::cli_alert_success("Returned data for id: {.val {.x}}")
+                if (is.na(out)) {
+                    out <<- df
+                } else {
+                    out <<- rbind(out, df)
+                }
+            } else {
+                cli::cli_alert_warning("Nothing returned for id: {.val {.x}}")
+                response
+            }
+        } else {
+            m <- "An error occurred {.val {response$status_code}}"
+            cli::cli_alert_danger(m)
+            response
+        }
+
+        Sys.sleep(delay)
+    })
+    tibble::as_tibble(out)
 }
 
 
@@ -147,23 +130,17 @@ pubmed$get_metadata <- function(ids) {
 #'
 #' @noRd
 pubmed$make_request <- function(id) {
-    response <- httr::GET(
+    httr::GET(
         url = paste0(
             "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi?",
             "db=pubmed",
             "&id=", id,
             "&retmode=json&"
+        ),
+        httr::add_headers(
+            `Content-Type` = "application/json"
         )
     )
-
-    if (response$status_code == 200) {
-        raw <- httr::content(response, as = "text", encoding = "UTF-8")
-        rjson::fromJSON(raw)
-    } else {
-        m <- "An error occurred {.val {response$status_code}}"
-        cli::cli_alert_danger(m)
-        response
-    }
 }
 
 #' clean_request
@@ -191,8 +168,91 @@ pubmed$clean_request <- function(x) {
     df
 }
 
-x <- pubmed$make_request(ids[1])
-pubmed$clean_request(x)
+#'//////////////////////////////////////
 
-library(pipeR)
-library(rlist)
+#' ~ 1 ~
+#' Build Request and pull data
+
+q <- "\"Genome of the Netherlands consortium\"[Corporate Author]"
+ids <- pubmed$get_ids(query = q)
+df <- pubmed$get_metadata(ids = ids, delay = 1)
+
+#' clean data
+df <- df %>%
+    mutate(
+        year = stringr::str_replace_all(
+            string = date,
+            pattern = "([a-zA-Z]+\\s+[0-9]+)|([a-zA-Z]+)",
+            replacement = " "
+        ) %>%
+        trimws(., "both"),
+        href_url = stringr::str_replace_all(
+            string = elocationId,
+            pattern = "doi: ",
+            replacement = "https://doi.org/"
+        ),
+        href_lab = stringr::str_replace_all(
+            string = elocationId,
+            pattern = "doi: ",
+            replacement = ""
+        )
+    )
+
+#' build html
+html <- sapply(
+    seq_len(NROW(df)),
+    function(d) {
+        as.character(
+            htmltools::tags$li(
+                class = "pub",
+                `data-uid` = df[d, c("uid")],
+                `data-pub-year` = df[d, c("year")],
+                htmltools::tags$span(
+                    class = "pub-data pub-title",
+                    df[d, c("title")]
+                ),
+                htmltools::tags$span(
+                    class = "pub-data pub-journal",
+                    df[d, c("journal")]
+                ),
+                htmltools::tags$span(
+                    class = "pub-data pub-year",
+                    df[d, c("year")]
+                ),
+                htmltools::tags$span(
+                    class = "pub-data pub-authors",
+                    df[d, c("authors")]
+                ),
+                htmltools::tags$a(
+                    class = "pub-data pub-doi",
+                    href = df[d, c("href_url")],
+                    df[d, c("href_lab")]
+                )
+            )
+        )
+    }
+)
+
+#'//////////////////////////////////////
+
+#' ~ 2 ~
+#' Write html to file
+
+# load output file
+output <- readLines("src/apps/publications/index.html", warn = FALSE)
+
+# find start and end points using `<!--- *htmlTableOutput: ... ->`
+positions <- list(
+    start = grep("<!--- starthtmlTableOuput: publicationList -->", output) + 1,
+    end = grep("<!--- endhtmlTableOuput: publicationList -->", output) - 1
+)
+
+# insert new html content
+new_output <- c(
+    output[1:positions$start],
+    html,
+    output[positions$end:length(output)]
+)
+
+# save new output
+write(new_output, "src/apps/publications/index.html")
