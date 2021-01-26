@@ -1,3 +1,0 @@
-name	label	idAttribute	dataType
-id	id	true	string
-sortOrder	sortOrder	false	int

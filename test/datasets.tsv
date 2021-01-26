@@ -1,8 +1,0 @@
-id	sortOrder
-SNV calls (498 unrelated parents and 249 children)	0
-INDEL calls (498 unrelated parents and 249 children)	1
-Imputation-ready haplotypes (SNVs + INDELs) (998 haplotypes)	2
-SV calls (> 20bp)	3
-trio-BAM files (249 trios, 498 unrelated parents, 249 children)	4
-unaligned fastq files (750 samples)	5
-Other	6
