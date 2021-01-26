@@ -95,7 +95,7 @@
         $("#start-form").removeClass("has-error");
         $(".help-block").css("display", "none");
         if ((stop && start) && (Number(stop) > Number(start)) && Number(stop) < 249000000 && Number(start) > -1) {
-            window.location.replace(`/menu/main/dataexplorer?entity=gonl_chr${chromosome}&mod=data&filter=(POS=ge=${start};POS=le=${stop})`);
+            window.location.replace(`/menu/main/dataexplorer?entity=gonl_chr${chromosome}&hideselect=true&mod=data&filter=(POS=ge=${start};POS=le=${stop})`);
         } else if (start && !stop) {
             $("#stop-form").addClass("has-error");
             $("#stop-help-none").css("display", "inline");
