@@ -101,7 +101,7 @@ pubmed$get_metadata <- function(ids, delay = 0.5) {
             df <- pubmed$clean_request(result)
             if (NROW(df) > 0) {
                 cli::cli_alert_success("Returned data for id: {.val {.x}}")
-                if (is.na(out)) {
+                if (.y == 1) {
                     out <<- df
                 } else {
                     out <<- rbind(out, df)
@@ -115,7 +115,6 @@ pubmed$get_metadata <- function(ids, delay = 0.5) {
             cli::cli_alert_danger(m)
             response
         }
-
         Sys.sleep(delay)
     })
     tibble::as_tibble(out)
@@ -154,7 +153,7 @@ pubmed$clean_request <- function(x) {
     id <- x[["result"]][["uids"]]
     df <- data.frame(
         uid = id,
-        date = x[["result"]][[id]][["pubdate"]],
+        date = x[["result"]][[id]][["sortpubdate"]],
         journal = x[["result"]][[id]][["fulljournalname"]],
         volume = x[["result"]][[id]][["volume"]],
         issue = x[["result"]][[id]][["issue"]],
@@ -171,21 +170,26 @@ pubmed$clean_request <- function(x) {
 #'//////////////////////////////////////
 
 #' ~ 1 ~
-#' Build Request and pull data
+#' Build Request and pull data first time only!
 
-q <- "\"Genome of the Netherlands consortium\"[Corporate Author]"
-ids <- pubmed$get_ids(query = q)
-df <- pubmed$get_metadata(ids = ids, delay = 1)
+papers <- list()
+papers$q <- list(
+    author = "\"Genome of the Netherlands consortium\"[Corporate Author]",
+    papers = "The Genome of the Netherlands: design, and project goals[Title]"
+)
+papers$ids <- c(
+    pubmed$get_ids(query = papers$q$author),
+    pubmed$get_ids(query = papers$q$papers)
+)
+papers$data <- pubmed$get_metadata(
+    ids = papers$ids,
+    delay = sample(runif(50, 0.75, 2), length(papers$ids))
+)
 
 #' clean data
-df <- df %>%
+pubs <- papers$data %>%
     mutate(
-        year = stringr::str_replace_all(
-            string = date,
-            pattern = "([a-zA-Z]+\\s+[0-9]+)|([a-zA-Z]+)",
-            replacement = " "
-        ) %>%
-        trimws(., "both"),
+        year = lubridate::ymd_hm(date) %>% as.Date(.),
         href_url = stringr::str_replace_all(
             string = elocationId,
             pattern = "doi: ",
@@ -196,49 +200,72 @@ df <- df %>%
             pattern = "doi: ",
             replacement = ""
         )
-    )
+    ) %>%
+    arrange(desc(year)) %>%
+    mutate(
+        year = lubridate::year(year),
+        html_order = rev(seq_len(length(uid)))
+    ) %>%
+    select(-issue, -elocationId)
 
+# if you are updating the publication dataset, then load and rbind data
+#' pubs <- bind_rows(
+#'     readr::read_tsv("data/pub_data.tsv"),
+#'     pubs
+#' )
+
+# save data
+readr::write_tsv(
+    data.frame(
+        type = names(papers$q),
+        query = c(papers$q)
+    ),
+    "data/pub_queries.tsv"
+)
+readr::write_tsv(pubs, "data/pub_data.tsv")
+
+#'//////////////////////////////////////
+
+#' ~ 2 ~
 #' build html
+
+#' pubs <- readr::read_tsv("data/pub_data.tsv")
 html <- sapply(
-    seq_len(NROW(df)),
+    seq_len(NROW(pubs)),
     function(d) {
         as.character(
             htmltools::tags$li(
                 class = "pub",
-                `data-uid` = df[d, c("uid")],
-                `data-pub-year` = df[d, c("year")],
+                `data-uid` = pubs[d, c("uid")],
+                `data-item` = pubs[d, c("html_order")],
+                `data-pub-year` = pubs[d, c("year")],
                 htmltools::tags$span(
                     class = "pub-data pub-title",
-                    df[d, c("title")]
+                    pubs[d, c("title")]
                 ),
                 htmltools::tags$span(
                     class = "pub-data pub-journal",
-                    df[d, c("journal")]
+                    pubs[d, c("journal")]
                 ),
                 htmltools::tags$span(
                     class = "pub-data pub-year",
-                    df[d, c("year")]
+                    pubs[d, c("year")]
                 ),
                 htmltools::tags$span(
                     class = "pub-data pub-authors",
-                    df[d, c("authors")]
+                    pubs[d, c("authors")]
                 ),
                 htmltools::tags$a(
                     class = "pub-data pub-doi",
-                    href = df[d, c("href_url")],
-                    df[d, c("href_lab")]
+                    href = pubs[d, c("href_url")],
+                    pubs[d, c("href_lab")]
                 )
             )
         )
     }
 )
 
-#'//////////////////////////////////////
-
-#' ~ 2 ~
 #' Write html to file
-
-# load output file
 output <- readLines("src/apps/publications/index.html", warn = FALSE)
 
 # find start and end points using `<!--- *htmlTableOutput: ... ->`

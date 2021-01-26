@@ -1,184 +1,202 @@
 <div id="publications-container" class="col-sm-7 offset-sm-3">
-	<h1 id="publications-section-title">Publications</h1>
-	<style>
-		#pubs-list {
-			max-width: 972px;
-		}
+  <h1 id="publications-section-title">Publications</h1>
+  <style>
+    #pubs-list {
+      max-width: 972px;
+    }
 
-		#pubs-list ol {
-			padding: 0;
-			padding-left: 1.5em;
+    #pubs-list ol {
+      padding: 0;
+      padding-left: 1.5em;
+			list-style:none;
+    }
+		
+		#pubs-list li {
+			position: relative;
 		}
-
-		#pubs-list .pub {
-			margin-bottom: 16px;
-		}
-
-		#pubs-list .pub .pub-data {
-			color: #3f454b;
+		
+		#pubs-list li::before {
+			content: attr(data-item) '.';
+			position: absolute;
+			margin-left: -1.5em;
+			margin-top: 2px;
 			line-height: 1.6;
-			margin-bottom: 8px;
 		}
 
-		#pubs-list .pub .pub-doi {
-			color: #017ffd;
-		}
+    #pubs-list .pub {
+      margin-bottom: 16px;
+    }
 
-		#pubs-list .pub .pub-title {
-			display: block;
-			font-size: 14pt;
-			color: #000000;
-			line-height: 1.4;
-		}
+    #pubs-list .pub .pub-data {
+      color: #3f454b;
+      line-height: 1.6;
+      margin-bottom: 8px;
+			font-weight: 400;
+    }
 
-		#pubs-list .pub .pub-journal::after {
-			content: ". ";
-		}
+    #pubs-list .pub .pub-doi {
+      color: #017ffd;
+    }
 
-		#pubs-list .pub .pub-authors {
-			display: block;
-		}
-	</style>
-	<section id="pubs-list" aria-labelledby="publications-section-title">
-		<p>Here you can find a list of recent publications. If you would like to add you publication to this list, make
-			sure it is available on <a
-			   href="http://www.ncbi.nlm.nih.gov/pubmed?term=Genome+of+the+Netherlands+Consortium[Corporate+Author]">
-				PubMed</a> and contact the GoNL consortium.
-		</p>
-		<!--- starthtmlTableOuput: publicationList -->
-		<ol>
-			<li class="pub" data-uid="31822713" data-pub-year="2019">
-				<span class="pub-data pub-title">WGS-based telomere length analysis in Dutch family trios implicates
-					stronger maternal inheritance and a role for RRM1 gene.</span>
-				<span class="pub-data pub-journal">Scientific reports</span>
-				<span class="pub-data pub-year">2019</span>
-				<span class="pub-data pub-authors">Nersisyan L, Nikoghosyan M, Genome of the Netherlands consortium.,
-					Arakelyan A</span>
-				<a class="pub-data pub-doi"
-				   href="https://doi.org/10.1038/s41598-019-55109-7">10.1038/s41598-019-55109-7</a>
-			</li>
-			<li class="pub" data-uid="28473589" data-pub-year="2017">
-				<span class="pub-data pub-title">Negative selection in humans and fruit flies involves synergistic
-					epistasis.</span>
-				<span class="pub-data pub-journal">Science (New York, N.Y.)</span>
-				<span class="pub-data pub-year">2017</span>
-				<span class="pub-data pub-authors">Sohail M, Vakhrusheva OA, Sul JH, Pulit SL, Francioli LC, Genome of
-					the Netherlands Consortium., Alzheimer’s Disease Neuroimaging Initiative., van den Berg LH, Veldink
-					JH, de Bakker PIW, Bazykin GA, Kondrashov AS, Sunyaev SR</span>
-				<a class="pub-data pub-doi" href="https://doi.org/10.1126/science.aah5238">10.1126/science.aah5238</a>
-			</li>
-			<li class="pub" data-uid="27876817" data-pub-year="2017">
-				<span class="pub-data pub-title">A framework for the detection of de novo mutations in family-based
-					sequencing data.</span>
-				<span class="pub-data pub-journal">European journal of human genetics : EJHG</span>
-				<span class="pub-data pub-year">2017</span>
-				<span class="pub-data pub-authors">Francioli LC, Cretu-Stancu M, Garimella KV, Fromer M, Kloosterman WP,
-					Genome of the Netherlands consortium., Samocha KE, Neale BM, Daly MJ, Banks E, DePristo MA, de
-					Bakker PI</span>
-				<a class="pub-data pub-doi" href="https://doi.org/10.1038/ejhg.2016.147">10.1038/ejhg.2016.147</a>
-			</li>
-			<li class="pub" data-uid="27708267" data-pub-year="2016">
-				<span class="pub-data pub-title">A high-quality human reference panel reveals the complexity and
-					distribution of genomic structural variants.</span>
-				<span class="pub-data pub-journal">Nature communications</span>
-				<span class="pub-data pub-year">2016</span>
-				<span class="pub-data pub-authors">Hehir-Kwa JY, Marschall T, Kloosterman WP, Francioli LC, Baaijens JA,
-					Dijkstra LJ, Abdellaoui A, Koval V, Thung DT, Wardenaar R, Renkens I, Coe BP, Deelen P, de Ligt J,
-					Lameijer EW, van Dijk F, Hormozdiari F, Genome of the Netherlands Consortium., Uitterlinden AG, van
-					Duijn CM, Eichler EE, de Bakker PI, Swertz MA, Wijmenga C, van Ommen GB, Slagboom PE, Boomsma DI,
-					Schönhuth A, Ye K, Guryev V</span>
-				<a class="pub-data pub-doi" href="https://doi.org/10.1038/ncomms12989">10.1038/ncomms12989</a>
-			</li>
-			<li class="pub" data-uid="26825711" data-pub-year="2016">
-				<span class="pub-data pub-title">Uncompromised 10-year survival of oldest old carrying somatic mutations
-					in DNMT3A and TET2.</span>
-				<span class="pub-data pub-journal">Blood</span>
-				<span class="pub-data pub-year">2016</span>
-				<span class="pub-data pub-authors">van den Akker EB, Pitts SJ, Deelen J, Moed MH, Potluri S, van Rooij
-					J, Suchiman HE, Lakenberg N, de Dijcker WJ, Uitterlinden AG, Kraaij R, Hofman A, de Craen AJ,
-					Houwing-Duistermaat JJ, van Ommen GJ, Genome of The Netherlands Consortium., Cox DR, van Meurs JB,
-					Beekman M, Reinders MJ, Slagboom PE</span>
-				<a class="pub-data pub-doi"
-				   href="https://doi.org/10.1182/blood-2015-12-685925">10.1182/blood-2015-12-685925</a>
-			</li>
-			<li class="pub" data-uid="26581902" data-pub-year="2015">
-				<span class="pub-data pub-title">Leveraging Distant Relatedness to Quantify Human Mutation and
-					Gene-Conversion Rates.</span>
-				<span class="pub-data pub-journal">American journal of human genetics</span>
-				<span class="pub-data pub-year">2015</span>
-				<span class="pub-data pub-authors">Palamara PF, Francioli LC, Wilton PR, Genovese G, Gusev A, Finucane
-					HK, Sankararaman S, Genome of the Netherlands Consortium., Sunyaev SR, de Bakker PI, Wakeley J,
-					Pe'er I, Price AL</span>
-				<a class="pub-data pub-doi"
-				   href="https://doi.org/10.1016/j.ajhg.2015.10.006">10.1016/j.ajhg.2015.10.006</a>
-			</li>
-			<li class="pub" data-uid="26226460" data-pub-year="2015">
-				<span class="pub-data pub-title">Population-specific genotype imputations using minimac or
-					IMPUTE2.</span>
-				<span class="pub-data pub-journal">Nature protocols</span>
-				<span class="pub-data pub-year">2015</span>
-				<span class="pub-data pub-authors">van Leeuwen EM, Kanterakis A, Deelen P, Kattenberg MV, Genome of the
-					Netherlands Consortium., Slagboom PE, de Bakker PI, Wijmenga C, Swertz MA, Boomsma DI, van Duijn CM,
-					Karssen LC, Hottenga JJ</span>
-				<a class="pub-data pub-doi" href="https://doi.org/10.1038/nprot.2015.077">10.1038/nprot.2015.077</a>
-			</li>
-			<li class="pub" data-uid="25987507" data-pub-year="2015">
-				<span class="pub-data pub-title">Heritability, SNP- and Gene-Based Analyses of Cannabis Use Initiation
-					and Age at Onset.</span>
-				<span class="pub-data pub-journal">Behavior genetics</span>
-				<span class="pub-data pub-year">2015</span>
-				<span class="pub-data pub-authors">Minică CC, Dolan CV, Hottenga JJ, Pool R, Genome of the Netherlands
-					Consortium., Fedko IO, Mbarek H, Huppertz C, Bartels M, Boomsma DI, Vink JM</span>
-				<a class="pub-data pub-doi"
-				   href="https://doi.org/10.1007/s10519-015-9723-9">10.1007/s10519-015-9723-9</a>
-			</li>
-			<li class="pub" data-uid="25985141" data-pub-year="2015">
-				<span class="pub-data pub-title">Genome-wide patterns and properties of de novo mutations in
-					humans.</span>
-				<span class="pub-data pub-journal">Nature genetics</span>
-				<span class="pub-data pub-year">2015</span>
-				<span class="pub-data pub-authors">Francioli LC, Polak PP, Koren A, Menelaou A, Chun S, Renkens I,
-					Genome of the Netherlands Consortium., van Duijn CM, Swertz M, Wijmenga C, van Ommen G, Slagboom PE,
-					Boomsma DI, Ye K, Guryev V, Arndt PF, Kloosterman WP, de Bakker PIW, Sunyaev SR</span>
-				<a class="pub-data pub-doi" href="https://doi.org/10.1038/ng.3292">10.1038/ng.3292</a>
-			</li>
-			<li class="pub" data-uid="25751400" data-pub-year="2015">
-				<span class="pub-data pub-title">Genome of The Netherlands population-specific imputations identify an
-					ABCA6 variant associated with cholesterol levels.</span>
-				<span class="pub-data pub-journal">Nature communications</span>
-				<span class="pub-data pub-year">2015</span>
-				<span class="pub-data pub-authors">van Leeuwen EM, Karssen LC, Deelen J, Isaacs A, Medina-Gomez C,
-					Mbarek H, Kanterakis A, Trompet S, Postmus I, Verweij N, van Enckevort DJ, Huffman JE, White CC,
-					Feitosa MF, Bartz TM, Manichaikul A, Joshi PK, Peloso GM, Deelen P, van Dijk F, Willemsen G, de Geus
-					EJ, Milaneschi Y, Penninx BW, Francioli LC, Menelaou A, Pulit SL, Rivadeneira F, Hofman A, Oostra
-					BA, Franco OH, Mateo Leach I, Beekman M, de Craen AJ, Uh HW, Trochet H, Hocking LJ, Porteous DJ,
-					Sattar N, Packard CJ, Buckley BM, Brody JA, Bis JC, Rotter JI, Mychaleckyj JC, Campbell H, Duan Q,
-					Lange LA, Wilson JF, Hayward C, Polasek O, Vitart V, Rudan I, Wright AF, Rich SS, Psaty BM, Borecki
-					IB, Kearney PM, Stott DJ, Adrienne Cupples L, Genome of The Netherlands Consortium., Jukema JW, van
-					der Harst P, Sijbrands EJ, Hottenga JJ, Uitterlinden AG, Swertz MA, van Ommen GJ, de Bakker PI,
-					Eline Slagboom P, Boomsma DI, Wijmenga C, van Duijn CM</span>
-				<a class="pub-data pub-doi" href="https://doi.org/10.1038/ncomms7065">10.1038/ncomms7065</a>
-			</li>
-			<li class="pub" data-uid="24974849" data-pub-year="2014">
-				<span class="pub-data pub-title">Whole-genome sequence variation, population structure and demographic
-					history of the Dutch population.</span>
-				<span class="pub-data pub-journal">Nature genetics</span>
-				<span class="pub-data pub-year">2014</span>
-				<span class="pub-data pub-authors">Genome of the Netherlands Consortium.</span>
-				<a class="pub-data pub-doi" href="https://doi.org/10.1038/ng.3021">10.1038/ng.3021</a>
-			</li>
-			<li class="pub" data-uid="23468643" data-pub-year="2013">
-				<span class="pub-data pub-title">Deleterious alleles in the human genome are on average younger than
-					neutral alleles of the same frequency.</span>
-				<span class="pub-data pub-journal">PLoS genetics</span>
-				<span class="pub-data pub-year">2013</span>
-				<span class="pub-data pub-authors">Kiezun A, Pulit SL, Francioli LC, van Dijk F, Swertz M, Boomsma DI,
-					van Duijn CM, Slagboom PE, van Ommen GJ, Wijmenga C, Genome of the Netherlands Consortium., de
-					Bakker PI, Sunyaev SR</span>
-				<a class="pub-data pub-doi"
-				   href="https://doi.org/10.1371/journal.pgen.1003301">10.1371/journal.pgen.1003301</a>
-			</li>
-		</ol>
-		<!--- endhtmlTableOuput: publicationList -->
-	</section>
+    #pubs-list .pub .pub-title {
+      display: block;
+      font-size: 14pt;
+      color: #000000;
+      line-height: 1.4;
+    }
+
+    #pubs-list .pub .pub-journal::after {
+      content: ". ";
+    }
+
+    #pubs-list .pub .pub-authors {
+      display: block;
+    }
+  </style>
+  <section id="pubs-list" aria-labelledby="publications-section-title">
+    <p>Here you can find a list of recent publications. If you would like to add you publication to this list, make
+      sure it is available on <a
+         href="http://www.ncbi.nlm.nih.gov/pubmed?term=Genome+of+the+Netherlands+Consortium[Corporate+Author]">
+        PubMed</a> and contact the GoNL consortium.
+    </p>
+    <!--- starthtmlTableOuput: publicationList -->
+    <ol>
+      <li class="pub" data-uid="31822713" data-item="13" data-pub-year="2019">
+        <span class="pub-data pub-title">WGS-based telomere length analysis in Dutch family trios implicates stronger
+          maternal inheritance and a role for RRM1 gene.</span>
+        <span class="pub-data pub-journal">Scientific reports</span>
+        <span class="pub-data pub-year">2019</span>
+        <span class="pub-data pub-authors">Nersisyan L, Nikoghosyan M, Genome of the Netherlands consortium., Arakelyan
+          A</span>
+        <a class="pub-data pub-doi" href="https://doi.org/10.1038/s41598-019-55109-7">10.1038/s41598-019-55109-7</a>
+      </li>
+      <li class="pub" data-uid="28473589" data-item="12" data-pub-year="2017">
+        <span class="pub-data pub-title">Negative selection in humans and fruit flies involves synergistic
+          epistasis.</span>
+        <span class="pub-data pub-journal">Science (New York, N.Y.)</span>
+        <span class="pub-data pub-year">2017</span>
+        <span class="pub-data pub-authors">Sohail M, Vakhrusheva OA, Sul JH, Pulit SL, Francioli LC, Genome of the
+          Netherlands Consortium., Alzheimer’s Disease Neuroimaging Initiative., van den Berg LH, Veldink JH, de Bakker
+          PIW, Bazykin GA, Kondrashov AS, Sunyaev SR</span>
+        <a class="pub-data pub-doi" href="https://doi.org/10.1126/science.aah5238">10.1126/science.aah5238</a>
+      </li>
+      <li class="pub" data-uid="27876817" data-item="11" data-pub-year="2017">
+        <span class="pub-data pub-title">A framework for the detection of de novo mutations in family-based sequencing
+          data.</span>
+        <span class="pub-data pub-journal">European journal of human genetics : EJHG</span>
+        <span class="pub-data pub-year">2017</span>
+        <span class="pub-data pub-authors">Francioli LC, Cretu-Stancu M, Garimella KV, Fromer M, Kloosterman WP, Genome
+          of the Netherlands consortium., Samocha KE, Neale BM, Daly MJ, Banks E, DePristo MA, de Bakker PI</span>
+        <a class="pub-data pub-doi" href="https://doi.org/10.1038/ejhg.2016.147">10.1038/ejhg.2016.147</a>
+      </li>
+      <li class="pub" data-uid="27708267" data-item="10" data-pub-year="2016">
+        <span class="pub-data pub-title">A high-quality human reference panel reveals the complexity and distribution of
+          genomic structural variants.</span>
+        <span class="pub-data pub-journal">Nature communications</span>
+        <span class="pub-data pub-year">2016</span>
+        <span class="pub-data pub-authors">Hehir-Kwa JY, Marschall T, Kloosterman WP, Francioli LC, Baaijens JA,
+          Dijkstra LJ, Abdellaoui A, Koval V, Thung DT, Wardenaar R, Renkens I, Coe BP, Deelen P, de Ligt J, Lameijer
+          EW, van Dijk F, Hormozdiari F, Genome of the Netherlands Consortium., Uitterlinden AG, van Duijn CM, Eichler
+          EE, de Bakker PI, Swertz MA, Wijmenga C, van Ommen GB, Slagboom PE, Boomsma DI, Schönhuth A, Ye K, Guryev
+          V</span>
+        <a class="pub-data pub-doi" href="https://doi.org/10.1038/ncomms12989">10.1038/ncomms12989</a>
+      </li>
+      <li class="pub" data-uid="26825711" data-item="9" data-pub-year="2016">
+        <span class="pub-data pub-title">Uncompromised 10-year survival of oldest old carrying somatic mutations in
+          DNMT3A and TET2.</span>
+        <span class="pub-data pub-journal">Blood</span>
+        <span class="pub-data pub-year">2016</span>
+        <span class="pub-data pub-authors">van den Akker EB, Pitts SJ, Deelen J, Moed MH, Potluri S, van Rooij J,
+          Suchiman HE, Lakenberg N, de Dijcker WJ, Uitterlinden AG, Kraaij R, Hofman A, de Craen AJ, Houwing-Duistermaat
+          JJ, van Ommen GJ, Genome of The Netherlands Consortium., Cox DR, van Meurs JB, Beekman M, Reinders MJ,
+          Slagboom PE</span>
+        <a class="pub-data pub-doi" href="https://doi.org/10.1182/blood-2015-12-685925">10.1182/blood-2015-12-685925</a>
+      </li>
+      <li class="pub" data-uid="26581902" data-item="8" data-pub-year="2015">
+        <span class="pub-data pub-title">Leveraging Distant Relatedness to Quantify Human Mutation and Gene-Conversion
+          Rates.</span>
+        <span class="pub-data pub-journal">American journal of human genetics</span>
+        <span class="pub-data pub-year">2015</span>
+        <span class="pub-data pub-authors">Palamara PF, Francioli LC, Wilton PR, Genovese G, Gusev A, Finucane HK,
+          Sankararaman S, Genome of the Netherlands Consortium., Sunyaev SR, de Bakker PI, Wakeley J, Pe'er I, Price
+          AL</span>
+        <a class="pub-data pub-doi" href="https://doi.org/10.1016/j.ajhg.2015.10.006">10.1016/j.ajhg.2015.10.006</a>
+      </li>
+      <li class="pub" data-uid="26226460" data-item="7" data-pub-year="2015">
+        <span class="pub-data pub-title">Population-specific genotype imputations using minimac or IMPUTE2.</span>
+        <span class="pub-data pub-journal">Nature protocols</span>
+        <span class="pub-data pub-year">2015</span>
+        <span class="pub-data pub-authors">van Leeuwen EM, Kanterakis A, Deelen P, Kattenberg MV, Genome of the
+          Netherlands Consortium., Slagboom PE, de Bakker PI, Wijmenga C, Swertz MA, Boomsma DI, van Duijn CM, Karssen
+          LC, Hottenga JJ</span>
+        <a class="pub-data pub-doi" href="https://doi.org/10.1038/nprot.2015.077">10.1038/nprot.2015.077</a>
+      </li>
+      <li class="pub" data-uid="25987507" data-item="6" data-pub-year="2015">
+        <span class="pub-data pub-title">Heritability, SNP- and Gene-Based Analyses of Cannabis Use Initiation and Age
+          at Onset.</span>
+        <span class="pub-data pub-journal">Behavior genetics</span>
+        <span class="pub-data pub-year">2015</span>
+        <span class="pub-data pub-authors">Minică CC, Dolan CV, Hottenga JJ, Pool R, Genome of the Netherlands
+          Consortium., Fedko IO, Mbarek H, Huppertz C, Bartels M, Boomsma DI, Vink JM</span>
+        <a class="pub-data pub-doi" href="https://doi.org/10.1007/s10519-015-9723-9">10.1007/s10519-015-9723-9</a>
+      </li>
+      <li class="pub" data-uid="25985141" data-item="5" data-pub-year="2015">
+        <span class="pub-data pub-title">Genome-wide patterns and properties of de novo mutations in humans.</span>
+        <span class="pub-data pub-journal">Nature genetics</span>
+        <span class="pub-data pub-year">2015</span>
+        <span class="pub-data pub-authors">Francioli LC, Polak PP, Koren A, Menelaou A, Chun S, Renkens I, Genome of the
+          Netherlands Consortium., van Duijn CM, Swertz M, Wijmenga C, van Ommen G, Slagboom PE, Boomsma DI, Ye K,
+          Guryev V, Arndt PF, Kloosterman WP, de Bakker PIW, Sunyaev SR</span>
+        <a class="pub-data pub-doi" href="https://doi.org/10.1038/ng.3292">10.1038/ng.3292</a>
+      </li>
+      <li class="pub" data-uid="25751400" data-item="4" data-pub-year="2015">
+        <span class="pub-data pub-title">Genome of The Netherlands population-specific imputations identify an ABCA6
+          variant associated with cholesterol levels.</span>
+        <span class="pub-data pub-journal">Nature communications</span>
+        <span class="pub-data pub-year">2015</span>
+        <span class="pub-data pub-authors">van Leeuwen EM, Karssen LC, Deelen J, Isaacs A, Medina-Gomez C, Mbarek H,
+          Kanterakis A, Trompet S, Postmus I, Verweij N, van Enckevort DJ, Huffman JE, White CC, Feitosa MF, Bartz TM,
+          Manichaikul A, Joshi PK, Peloso GM, Deelen P, van Dijk F, Willemsen G, de Geus EJ, Milaneschi Y, Penninx BW,
+          Francioli LC, Menelaou A, Pulit SL, Rivadeneira F, Hofman A, Oostra BA, Franco OH, Mateo Leach I, Beekman M,
+          de Craen AJ, Uh HW, Trochet H, Hocking LJ, Porteous DJ, Sattar N, Packard CJ, Buckley BM, Brody JA, Bis JC,
+          Rotter JI, Mychaleckyj JC, Campbell H, Duan Q, Lange LA, Wilson JF, Hayward C, Polasek O, Vitart V, Rudan I,
+          Wright AF, Rich SS, Psaty BM, Borecki IB, Kearney PM, Stott DJ, Adrienne Cupples L, Genome of The Netherlands
+          Consortium., Jukema JW, van der Harst P, Sijbrands EJ, Hottenga JJ, Uitterlinden AG, Swertz MA, van Ommen GJ,
+          de Bakker PI, Eline Slagboom P, Boomsma DI, Wijmenga C, van Duijn CM</span>
+        <a class="pub-data pub-doi" href="https://doi.org/10.1038/ncomms7065">10.1038/ncomms7065</a>
+      </li>
+      <li class="pub" data-uid="24974849" data-item="3" data-pub-year="2014">
+        <span class="pub-data pub-title">Whole-genome sequence variation, population structure and demographic history
+          of the Dutch population.</span>
+        <span class="pub-data pub-journal">Nature genetics</span>
+        <span class="pub-data pub-year">2014</span>
+        <span class="pub-data pub-authors">Genome of the Netherlands Consortium.</span>
+        <a class="pub-data pub-doi" href="https://doi.org/10.1038/ng.3021">10.1038/ng.3021</a>
+      </li>
+      <li class="pub" data-uid="23714750" data-item="2" data-pub-year="2014">
+        <span class="pub-data pub-title">The Genome of the Netherlands: design, and project goals.</span>
+        <span class="pub-data pub-journal">European journal of human genetics : EJHG</span>
+        <span class="pub-data pub-year">2014</span>
+        <span class="pub-data pub-authors">Boomsma DI, Wijmenga C, Slagboom EP, Swertz MA, Karssen LC, Abdellaoui A, Ye
+          K, Guryev V, Vermaat M, van Dijk F, Francioli LC, Hottenga JJ, Laros JF, Li Q, Li Y, Cao H, Chen R, Du Y, Li
+          N, Cao S, van Setten J, Menelaou A, Pulit SL, Hehir-Kwa JY, Beekman M, Elbers CC, Byelas H, de Craen AJ,
+          Deelen P, Dijkstra M, den Dunnen JT, de Knijff P, Houwing-Duistermaat J, Koval V, Estrada K, Hofman A,
+          Kanterakis A, Enckevort Dv, Mai H, Kattenberg M, van Leeuwen EM, Neerincx PB, Oostra B, Rivadeneira F,
+          Suchiman EH, Uitterlinden AG, Willemsen G, Wolffenbuttel BH, Wang J, de Bakker PI, van Ommen GJ, van Duijn
+          CM</span>
+        <a class="pub-data pub-doi" href="https://doi.org/10.1038/ejhg.2013.118">10.1038/ejhg.2013.118</a>
+      </li>
+      <li class="pub" data-uid="23468643" data-item="1" data-pub-year="2013">
+        <span class="pub-data pub-title">Deleterious alleles in the human genome are on average younger than neutral
+          alleles of the same frequency.</span>
+        <span class="pub-data pub-journal">PLoS genetics</span>
+        <span class="pub-data pub-year">2013</span>
+        <span class="pub-data pub-authors">Kiezun A, Pulit SL, Francioli LC, van Dijk F, Swertz M, Boomsma DI, van Duijn
+          CM, Slagboom PE, van Ommen GJ, Wijmenga C, Genome of the Netherlands Consortium., de Bakker PI, Sunyaev
+          SR</span>
+        <a class="pub-data pub-doi" href="https://doi.org/10.1371/journal.pgen.1003301">10.1371/journal.pgen.1003301</a>
+      </li>
+    </ol>
+    <!--- endhtmlTableOuput: publicationList -->
+  </section>
 </div>
