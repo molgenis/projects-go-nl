@@ -1,0 +1,10 @@
+entity	name	description	dataType	idAttribute
+history	uid	pubmed idenitifer	string	TRUE
+history	sortpubdate	year of publication	int	FALSE
+history	fulljournalname	journal title	string	FALSE
+history	volume	publication volume	int	FALSE
+history	title	article title	text	FALSE
+history	authors	all authors collapsed	text	FALSE
+history	doi_url	doi url for html href	hyperlink	FALSE
+history	doi_label	url link label	string	FALSE
+history	html_order	int for html purposes only	int	FALSE

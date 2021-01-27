@@ -20,14 +20,15 @@
 #' install.packages("htmltools")
 
 #' test packages
-packageVersion("dplyr")
-packageVersion("httr")
-packageVersion("rjson")
-packageVersion("cli")
-packageVersion("purrr")
-packageVersion("tibble")
-packageVersion("rlist")
-packageVersion("htmltools")
+#' packageVersion("dplyr")
+#' packageVersion("httr")
+#' packageVersion("rjson")
+#' packageVersion("cli")
+#' packageVersion("purrr")
+#' packageVersion("tibble")
+#' packageVersion("rlist")
+#' packageVersion("htmltools")
+#' packageVersion("stringr")
 
 #' load pkgs for current script
 suppressPackageStartupMessages(library(dplyr))
@@ -151,12 +152,11 @@ pubmed$make_request <- function(id) {
 #' @export
 pubmed$clean_request <- function(x) {
     id <- x[["result"]][["uids"]]
-    df <- data.frame(
+    data.frame(
         uid = id,
-        date = x[["result"]][[id]][["sortpubdate"]],
-        journal = x[["result"]][[id]][["fulljournalname"]],
+        sortpubdate = x[["result"]][[id]][["sortpubdate"]],
+        fulljournalname = x[["result"]][[id]][["fulljournalname"]],
         volume = x[["result"]][[id]][["volume"]],
-        issue = x[["result"]][[id]][["issue"]],
         elocationId = x[["result"]][[id]][["elocationid"]],
         title = x[["result"]][[id]][["title"]],
         authors = x[["result"]][[id]][["authors"]] %>%
@@ -164,122 +164,119 @@ pubmed$clean_request <- function(x) {
             pull(name) %>%
             paste0(., collapse = ", ")
     )
-    df
 }
 
-#'//////////////////////////////////////
-
-#' ~ 1 ~
-#' Build Request and pull data first time only!
-
-papers <- list()
-papers$q <- list(
-    author = "\"Genome of the Netherlands consortium\"[Corporate Author]",
-    papers = "The Genome of the Netherlands: design, and project goals[Title]"
-)
-papers$ids <- c(
-    pubmed$get_ids(query = papers$q$author),
-    pubmed$get_ids(query = papers$q$papers)
-)
-papers$data <- pubmed$get_metadata(
-    ids = papers$ids,
-    delay = sample(runif(50, 0.75, 2), length(papers$ids))
-)
-
-#' clean data
-pubs <- papers$data %>%
-    mutate(
-        year = lubridate::ymd_hm(date) %>% as.Date(.),
-        href_url = stringr::str_replace_all(
-            string = elocationId,
-            pattern = "doi: ",
-            replacement = "https://doi.org/"
-        ),
-        href_lab = stringr::str_replace_all(
-            string = elocationId,
-            pattern = "doi: ",
-            replacement = ""
+#' build_df
+#'
+#' Compile results from `get_metadata` into a tidy object
+#'
+#' @param x an output from get_metadata
+#'
+#' @export
+pubmed$build_df <- function(x) {
+    x %>%
+        # clean publication data and prepare html attributes for
+        # doi link
+        mutate(
+            sortpubdate = lubridate::ymd_hm(sortpubdate) %>%
+                as.Date(.),
+            doi_url = stringr::str_replace_all(
+                string = elocationId,
+                pattern = "doi: ",
+                replacement = "https://doi.org/"
+            ),
+            doi_label = stringr::str_replace_all(
+                string = elocationId,
+                pattern = "doi: ",
+                replacement = ""
+            )
+        ) %>%
+        select(-elocationId) %>%
+        arrange(desc(sortpubdate)) %>%
+        mutate(
+            sortpubdate = lubridate::year(sortpubdate),
+            html_order = rev(seq_len(length(uid)))
         )
-    ) %>%
-    arrange(desc(year)) %>%
-    mutate(
-        year = lubridate::year(year),
-        html_order = rev(seq_len(length(uid)))
-    ) %>%
-    select(-issue, -elocationId)
+}
 
-# if you are updating the publication dataset, then load and rbind data
-#' pubs <- bind_rows(
-#'     readr::read_tsv("data/pub_data.tsv"),
-#'     pubs
-#' )
-
-# save data
-readr::write_tsv(
-    data.frame(
-        type = names(papers$q),
-        query = c(papers$q)
-    ),
-    "data/pub_queries.tsv"
-)
-readr::write_tsv(pubs, "data/pub_data.tsv")
-
-#'//////////////////////////////////////
-
-#' ~ 2 ~
-#' build html
-
-#' pubs <- readr::read_tsv("data/pub_data.tsv")
-html <- sapply(
-    seq_len(NROW(pubs)),
-    function(d) {
+#' build_html
+#'
+#' After results have been cleaned, generate the html markup
+#'
+#' @param x output from `build_pubs` function
+#'
+#' @export
+pubmed$build_html <- function(x) {
+    sapply(seq_len(NROW(x)), function(d) {
         as.character(
             htmltools::tags$li(
                 class = "pub",
-                `data-uid` = pubs[d, c("uid")],
-                `data-item` = pubs[d, c("html_order")],
-                `data-pub-year` = pubs[d, c("year")],
+                `data-uid` = x[["uid"]][[d]],
+                `data-item` = x[["html_order"]][[d]],
+                `data-pub-year` = x[["year"]][[d]],
                 htmltools::tags$span(
                     class = "pub-data pub-title",
-                    pubs[d, c("title")]
+                    x[["title"]][[d]]
                 ),
                 htmltools::tags$span(
                     class = "pub-data pub-journal",
-                    pubs[d, c("journal")]
+                    x[["fulljournalname"]][[d]]
                 ),
                 htmltools::tags$span(
                     class = "pub-data pub-year",
-                    pubs[d, c("year")]
+                    x[["sortpubdate"]][[d]]
                 ),
                 htmltools::tags$span(
                     class = "pub-data pub-authors",
-                    pubs[d, c("authors")]
+                    x[["authors"]][[d]]
                 ),
                 htmltools::tags$a(
                     class = "pub-data pub-doi",
-                    href = pubs[d, c("href_url")],
-                    pubs[d, c("href_lab")]
+                    href = x[["doi_url"]][[d]],
+                    x[["doi_label"]][[d]]
                 )
             )
-        )
-    }
-)
+        )}
+    )
+}
 
-#' Write html to file
-output <- readLines("src/apps/publications/index.html", warn = FALSE)
+#' write_html
+#'
+#' Write html markup to file using comment anchors. Your output file must have
+#' the following comments. Make sure you replace `yourId` with your own Ids.
+#'
+#' `<!--- startHtmlOuput: yourId -->`
+#' `<!--- endHtmlOuput: youId -->`
+#'
+#' Place the comments anywhere in your html document. Please note that any
+#' markup within these comments will be replaced.
+#'
+#' @param file path to html document to render content into
+#' @param id id of the comment anchors
+#' @param html object containing the html markup
+#'
+#' @export
+pubmed$write_html <- function(file, id, html) {
 
-# find start and end points using `<!--- *htmlTableOutput: ... ->`
-positions <- list(
-    start = grep("<!--- starthtmlTableOuput: publicationList -->", output) + 1,
-    end = grep("<!--- endhtmlTableOuput: publicationList -->", output) - 1
-)
+    #' Read html to file
+    input <- readLines(file, warn = FALSE)
 
-# insert new html content
-new_output <- c(
-    output[1:positions$start],
-    html,
-    output[positions$end:length(output)]
-)
+    # find start and end points using `<!--- *HtmlOutput: ... ->`
+    ids <- list()
+    ids$start <- paste0("<!--- startHtmlOuput: ", id, " -->")
+    ids$end <- paste0("<!--- endHtmlOuput: ", id, " -->")
 
-# save new output
-write(new_output, "src/apps/publications/index.html")
+    positions <- list()
+    positions$start <- grep(ids$start, input)
+    positions$end <- grep(ids$end, input)
+
+    # insert new html content
+    output <- c(
+        input[1:positions$start],
+        html,
+        input[positions$end:length(input)]
+    )
+
+    # save new output
+    write(output, file)
+}

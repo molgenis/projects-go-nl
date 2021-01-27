@@ -2,7 +2,7 @@
 #' FILE: emx_create_01_pkg.R
 #' AUTHOR: David Ruvolo
 #' CREATED: 2020-11-20
-#' MODIFIED: 2020-11-20
+#' MODIFIED: 2021-01-27
 #' PURPOSE: create GoNL EMX package
 #' STATUS: working
 #' PACKAGES: dplyr; readr
@@ -17,16 +17,13 @@ suppressPackageStartupMessages(library(dplyr))
 #' Save as `.tsv` file
 data.frame(
     id = c(
-        "gonl",
-        "requests"
+        "gonl"
     ),
     label = c(
-        "GoNL",
-        "Data Requests"
+        "GoNL"
     ),
     description = c(
-        "Genome of the Netherlands",
-        "All data access requests"
+        "Genome of the Netherlands"
     )
 ) %>%
     readr::write_tsv(
