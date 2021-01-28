@@ -1,0 +1,4 @@
+"entity","name","description","dataType","idAttribute","nillable"
+"queries","id","a auto generated ID","string",TRUE,FALSE
+"queries","type","a general grouping","string",FALSE,TRUE
+"queries","query","query to run","string",FALSE,TRUE

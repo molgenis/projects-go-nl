@@ -124,3 +124,11 @@ mcmd give anonymous view gonl
 # mcmd give anonymous view navigator
 # mcmd give anonymous view dataexplorer
 # mcmd give anonymous view directory
+
+# upload publications dataset
+mcmd import -p data/pubdata/sys_md_Package.csv
+mcmd import -p data/pubdata/entities.csv
+mcmd import -p data/pubdata/records_attributes.csv --as attributes --in publications
+mcmd import -p data/pubdata/queries_attributes.csv --as attributes --in publications
+mcmd import -p data/pubdata/records.csv --as publications_records --in publications
+mcmd import -p data/pubdata/queries.csv --as publications_queries --in publications

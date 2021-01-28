@@ -9,6 +9,9 @@
 #' COMMENTS: Na
 #'////////////////////////////////////////////////////////////////////////////
 
+#' load pubmed tools
+source("R/pubmed_99_utils.R")
+
 #' ~ 1 ~
 #' Build Request and pull data
 
@@ -19,16 +22,22 @@ ref_df <- readr::read_tsv("data/pubdatda/publications_history.tsv")
 papers <- list()
 
 #' define queries here
-papers$q <- list(
-    author = "\"Genome of the Netherlands consortium\"[Corporate Author]",
-    papers = "The Genome of the Netherlands: design, and project goals[Title]"
+papers$queries <- data.frame(
+    id = c("q_01", "q_02"),
+    type = c("author", "papers"),
+    query = c(
+        "\"Genome of the Netherlands consortium\"[Corporate Author]",
+        "The Genome of the Netherlands: design, and project goals[Title]"
+    )
 )
 
+#' save queries
+#' write.csv(papers$queries, "data/pubdata/queries.csv", row.names = FALSE)
+
 #' get publication ids for each query
-papers$ids <- c(
-    pubmed$get_ids(query = papers$q$author),
-    pubmed$get_ids(query = papers$q$papers)
-)
+papers$ids <- unlist(lapply(papers$queries$query, function(x) {
+    pubmed$get_ids(query = x)
+}))
 
 #' if `ref_df` exists, remove existing Ids (we are interested in new ids)
 papers$ids <- papers$ids[!papers$ids %in% ref_df$uid]
@@ -58,5 +67,5 @@ if (length(papers$ids)) {
     )
 
     #' save data
-    readr::write_tsv(pubs, "data/pubdata/publications_history.tsv")
+    write.csv(pubs, "data/pubdata/records.csv", row.names = FALSE)
 }
