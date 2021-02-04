@@ -16,7 +16,7 @@ source("R/pubmed_99_utils.R")
 #' Build Request and pull data
 
 #' load publication dataset for Ids (if exists)
-ref_df <- readr::read_tsv("data/pubdatda/publications_history.tsv")
+ref_df <- readr::read_tsv("data/pubdatda/publications.tsv")
 
 #' build and run requests
 papers <- list()
