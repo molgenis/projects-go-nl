@@ -2,8 +2,9 @@ name: update publications workflow
 on:
   schedule:
     - cron: "0 9 * * 5" # every friday @ 9am
+  workflow_dispatch:
 jobs:
-  Fetch-Publications:
+  update-publications-via-pubmed-api:
     name: update GoNL publication list
     runs-on: ubuntu-latest
     strategy:
@@ -11,10 +12,12 @@ jobs:
         r-version: [4.0.3]
     steps:
       - uses: actions/checkout@v2
+
       - name: Set up R ${{ matrix.r-version }}
         uses: r-lib/actions/setup-r@v1
         with:
           r-version: $({ matrix.config.r })
+
       - name: Cache R packages
         id: cache
         uses: actions/cache@v2
@@ -23,6 +26,7 @@ jobs:
           key: ${{ runner.os }}-shinydoc
           restore-keys: |
             ${{ runner.os }}-
+
       - name: Install dependencies
         if: steps.cache.outputs.cache-hit != 'true'
         run: |
@@ -31,6 +35,7 @@ jobs:
             "purrr", "tibble", "rlist", "htmltools"
           ))
         shell: Rscript {0}
+
       - name: Run PubMed API
         run: |
           source("R/pubmed_02_update.R")
