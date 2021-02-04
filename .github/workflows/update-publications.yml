@@ -31,7 +31,7 @@ jobs:
         if: steps.cache.outputs.cache-hit != 'true'
         run: |
           install.packages(c(
-            "dplyr", "httr", "rjson", "cli",
+            "dplyr", "httr", "rjson", "cli", "readr",
             "purrr", "tibble", "rlist", "htmltools"
           ))
         shell: Rscript {0}
