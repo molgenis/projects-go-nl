@@ -127,19 +127,17 @@ if (length(api$ids) > 0) {
     )
 
     # prepare publications dataset
-    pubs <- pubmed$build_df(data = result)
+    pubs <- pubmed$build_df(data = result) %>% arrange(uid)
     cli::cli_alert_info(
         "Processed data dims: {.val {paste0(dim(pubs), collapse = ', ')}}"
     )
 
-    main <- dplyr::bind_rows(data, pubs) %>% arrange(uid)
+    # uncomment if you want to bind with existing data
+    #' main <- dplyr::bind_rows(data, pubs) %>% arrange(uid)
 
     # save data
     cli::cli_alert_info("Importing data into molgenis")
-    readr::write_csv(main, "data/publications_records.csv")
-
-    cli::cli_h2("Preview of data")
-    print(tibble::as_tibble(main))
+    readr::write_csv(pubs, "data/publications_records.csv")
 
     # import
     resp <- httr::POST(
@@ -166,4 +164,7 @@ if (length(api$ids) > 0) {
             "Failed to import data (resp: {.val {resp$status_code}})"
         )
     }
+
+    cli::cli_h2("Preview of the new data")
+    print(tibble::as_tibble(pubs))
 }
