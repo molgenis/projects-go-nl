@@ -31,7 +31,7 @@ molgenis <- list(
 #' fetch Pubmed API queries and publications entity from Molgenis
 
 # start msg
-# cli::cli_alert_info("Importing reference datasets from Molgenis Host")
+cli::cli_h1("Starting Pubmed API querying...")
 
 #' ~ 1a ~
 # fetch API queries
@@ -137,11 +137,15 @@ if (length(api$ids) > 0) {
     # save data
     cli::cli_alert_info("Importing data into molgenis")
     readr::write_csv(main, "data/publications_records.csv")
-    tibble::as_tibble(main)
+    print(tibble::as_tibble(main))
 
     # import
     resp <- httr::POST(
-        url = paste0(molgenis$host, "/plugin/importwizard/importFile/"),
+        url = paste0(
+            molgenis$host,
+            "/plugin/importwizard/importFile",
+            "?packageId=publications"
+        ),
         body = list(
             file = httr::upload_file("data/publications_records.csv")
         ),
