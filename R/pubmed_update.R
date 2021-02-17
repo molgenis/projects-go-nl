@@ -2,11 +2,11 @@
 #' FILE: pubmed_update.R
 #' AUTHOR: David Ruvolo
 #' CREATED: 2021-01-27
-#' MODIFIED: 2021-01-27
+#' MODIFIED: 2021-02-27
 #' PURPOSE: update publication history
-#' STATUS: in.progress
-#' PACKAGES: see below
-#' COMMENTS: Na
+#' STATUS: ongoing
+#' PACKAGES: dplyr; see DESCRITPION
+#' COMMENTS: NA
 #'////////////////////////////////////////////////////////////////////////////
 
 # pkgs
@@ -20,7 +20,7 @@ httr::set_config(httr::config(http_version = 0))
 
 # define molgenis API endpoints
 molgenis <- list(
-    host = "https://go-nl-acc.gcc.rug.nl",
+    host = "https://go-nl-acc.gcc.rug.nl",  # remove trailing forward slash
     token = Sys.getenv("MOLGENIS_TOKEN")
 )
 
@@ -31,7 +31,7 @@ molgenis <- list(
 #' fetch Pubmed API queries and publications entity from Molgenis
 
 # start msg
-cli::cli_alert_info("Importing reference datasets from Molgenis Host")
+# cli::cli_alert_info("Importing reference datasets from Molgenis Host")
 
 #' ~ 1a ~
 # fetch API queries
@@ -92,9 +92,10 @@ api <- list()
 
 #' ~ 2a ~
 # Run queries to identify new publications
-cli::cli_alert_info("Processing publication queries:")
 if (NROW(queries$query) > 1) {
-    cli::cli_alert_info("Binding multiple queries into an array")
+    cli::cli_alert_info(
+        "Fetching publication IDs (queries: {.val { NROW(queries$query) }} )"
+    )
     api$ids <- unlist(
         lapply(
             X = queries$query,
@@ -104,20 +105,22 @@ if (NROW(queries$query) > 1) {
         )
     )
 } else {
-    cli::cli_alert_info("Fetching IDs using one query")
+    cli::cli_alert_info("Fetching publication IDs (queries: {.val 1})")
     api$ids <- pubmed$get_ids(queries$query)
 }
 
 #' ~ 2b ~
 # remove existing IDs from api ID query list
-cli::cli_alert_info("Removing existing IDs using reference data: ")
 api$ids <- api$ids[!api$ids %in% data$uid]
+
+if (length(api$ids) == 0) {
+    cli::cli_alert_success("Publication records are up to date!")
+}
 
 #' ~ 2c ~
 # fetch publication metadata (if there are new Ids)
 if (length(api$ids) > 0) {
-    cli::cli_alert_info("Total IDs to query: {.val {length(api$ids)}}")
-    cli::cli_alert_info("Pulling Metadata for new IDs: ")
+    cli::cli_alert_info("Total pubIDs to query: {.val {length(api$ids)}}")
     result <- pubmed$get_metadata(
         ids = api$ids,
         delay = sample(runif(50, 0.75, 2), length(api$ids))
@@ -150,9 +153,8 @@ if (length(api$ids) > 0) {
     if (resp$status_code == 201) {
         cli::cli_alert_success("Successfully imported!")
     } else {
-        cli::cli_alert_danger("Failed to import publications data")
+        cli::cli_alert_danger(
+            "Failed to import data (resp: {.val {resp$status_code}})"
+        )
     }
-
-} else {
-    cli::cli_alert_info("Publication records are up to date")
 }
