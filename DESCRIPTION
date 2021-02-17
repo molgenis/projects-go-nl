@@ -24,4 +24,5 @@ Imports:
     stringr,
     lubridate,
     readr,
-    jsonlite
+    jsonlite,
+    tibble

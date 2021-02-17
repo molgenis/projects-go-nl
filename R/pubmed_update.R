@@ -137,6 +137,7 @@ if (length(api$ids) > 0) {
     # save data
     cli::cli_alert_info("Importing data into molgenis")
     readr::write_csv(main, "data/publications_records.csv")
+    tibble::as_tibble(main)
 
     # import
     resp <- httr::POST(
@@ -151,7 +152,9 @@ if (length(api$ids) > 0) {
 
     # process response
     if (resp$status_code == 201) {
-        cli::cli_alert_success("Successfully imported!")
+        cli::cli_alert_success(
+            "Imported data (resp: {.val { resp$status_code }})"
+        )
     } else {
         cli::cli_alert_danger(
             "Failed to import data (resp: {.val {resp$status_code}})"
