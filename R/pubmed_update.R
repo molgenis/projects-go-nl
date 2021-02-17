@@ -31,7 +31,7 @@ molgenis <- list(
 #' fetch Pubmed API queries and publications entity from Molgenis
 
 # start msg
-cli::cli_h1("Starting Pubmed API querying...")
+cli::cli_h1("Starting Pubmed API querying")
 
 #' ~ 1a ~
 # fetch API queries
@@ -74,7 +74,7 @@ if (pubs_response$status_code == 200) {
         jsonlite::fromJSON(.) %>%
         `[[`("items")
 
-    if (is.null(data)) {
+    if (NROW(data) > 0) {
         data <- data %>% select(-href)
     }
 } else {
@@ -137,6 +137,8 @@ if (length(api$ids) > 0) {
     # save data
     cli::cli_alert_info("Importing data into molgenis")
     readr::write_csv(main, "data/publications_records.csv")
+
+    cli::cli_h2("Preview of data")
     print(tibble::as_tibble(main))
 
     # import
