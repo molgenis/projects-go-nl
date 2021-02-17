@@ -13,8 +13,8 @@
 suppressPackageStartupMessages(library(dplyr))
 
 # for testing
-source("R/pubmed_utils.R")
-Sys.setenv("MOLGENIS_TOKEN" = "2v0s7OGZWIqYMHyub4vZjkvDTYP2RSxi")
+#' source("R/pubmed_utils.R")
+#' Sys.setenv("MOLGENIS_TOKEN" = "")
 
 httr::set_config(httr::config(http_version = 0))
 
