@@ -2,59 +2,22 @@
 #' FILE: pubmed_api.R
 #' AUTHOR: David Ruvolo
 #' CREATED: 2021-01-20
-#' MODIFIED: 2021-01-21
+#' MODIFIED: 2021-02-16
 #' PURPOSE: source publications list from pubmed
-#' STATUS: in.progress
-#' PACKAGES: *see below*
+#' STATUS: working
+#' PACKAGES: *see DESCRITPION*
 #' COMMENTS: NA
 #'////////////////////////////////////////////////////////////////////////////
 
-#' pkgs
-#' install.packages("dplyr")
-#' install.packages("httr")
-#' install.packages("rjson")
-#' install.packages("cli")
-#' install.packages("purrr")
-#' install.packages("tibble")
-#' install.packages("rlist")
-#' install.packages("htmltools")
-
-#' test packages
-#' packageVersion("dplyr")
-#' packageVersion("httr")
-#' packageVersion("rjson")
-#' packageVersion("cli")
-#' packageVersion("purrr")
-#' packageVersion("tibble")
-#' packageVersion("rlist")
-#' packageVersion("htmltools")
-#' packageVersion("stringr")
-
-#' load pkgs for current script
-suppressPackageStartupMessages(library(dplyr))
-
-#' pubmed
-#'
-#' Methods for extacting pubmed data
-#'
-#' @export
+# pubmed
+# Methods for extacting pubmed data
 pubmed <- list(class = "pubmed")
 
-#' get_ids
-#'
-#' In order to return publication metadata, you need to first retreive
-#' publication IDs. You can do this by building a query and using
-#' `get_ids`. Result is a character array.
-#'
-#' @param query a search query to run
-#'
-#' @examples
-#' q <- "\"Genome of the Netherlands consortium\"[Corporate Author]"
-#' ids <- pubmed$get_ids(query = q)
-#'
-#' @return Get list of publication IDs
-#'
-#' @export
+# get_ids
+#
+# In order to return publication metadata, you need to first retreive
+# publication IDs. You can do this by building a query and using
+# `get_ids`. Result is a character array.
 pubmed$get_ids <- function(query) {
 
     response <- httr::GET(
@@ -76,24 +39,16 @@ pubmed$get_ids <- function(query) {
             `[[`("esearchresult") %>%
             `[[`("idlist")
     } else {
-        m <- "An error occurred {.val {response$status_code}}"
-        cli::cli_alert_danger(m)
-        response
+        stop(paste0("An error occurred: ", response$status_code))
     }
 }
 
-#' get_metadata
-#'
-#' Using the list of publication IDs, you can now extract publication
-#' metadata. Pass the output of `get_ids`.
-#'
-#' @param ids a character array containing a list of IDs (output from get_ids)
-#'
-#' @examples
-#'
-#' @export
+# get_metadata
+#
+# Using the list of publication IDs, you can now extract publication
+# metadata. Pass the output of `get_ids`.
 pubmed$get_metadata <- function(ids, delay = 0.5) {
-    out <- NA
+    out <- data.frame()
     purrr::imap(ids, function(.x, .y) {
         response <- pubmed$make_request(.x)
         if (response$status_code == 200) {
@@ -101,24 +56,21 @@ pubmed$get_metadata <- function(ids, delay = 0.5) {
             result <- rjson::fromJSON(raw)
             df <- pubmed$clean_request(result)
             if (NROW(df) > 0) {
-                cli::cli_alert_success("Returned data for id: {.val {.x}}")
+                cli::cli_alert_success("Returned data for pubID {.val {.x}}")
                 if (.y == 1) {
                     out <<- df
                 } else {
                     out <<- rbind(out, df)
                 }
             } else {
-                cli::cli_alert_warning("Nothing returned for id: {.val {.x}}")
-                response
+                cli::cli_alert_success("No data for pubID {.val {.x}}")
             }
         } else {
-            m <- "An error occurred {.val {response$status_code}}"
-            cli::cli_alert_danger(m)
-            response
+            cli::cli_alert_danger("Query failed for {.val {.x}}")
         }
         Sys.sleep(delay)
     })
-    tibble::as_tibble(out)
+    return(out)
 }
 
 
@@ -143,60 +95,50 @@ pubmed$make_request <- function(id) {
     )
 }
 
-#' clean_request
-#'
-#' Clean the result of `make_request`
-#'
-#' @param x a result from `make_request`
-#'
-#' @export
+# clean_request
+# Clean the result of `make_request`
 pubmed$clean_request <- function(x) {
     id <- x[["result"]][["uids"]]
-    data.frame(
+    data <- data.frame(
         uid = id,
         sortpubdate = x[["result"]][[id]][["sortpubdate"]],
         fulljournalname = x[["result"]][[id]][["fulljournalname"]],
         volume = x[["result"]][[id]][["volume"]],
         elocationId = x[["result"]][[id]][["elocationid"]],
-        title = x[["result"]][[id]][["title"]],
-        authors = x[["result"]][[id]][["authors"]] %>%
-            rlist::list.stack() %>%
-            pull(name) %>%
-            paste0(., collapse = ", ")
+        title = x[["result"]][[id]][["title"]]
     )
+    data$authors <- paste0(
+        sapply(
+            x[["result"]][[id]][["authors"]],
+            function(n) {
+                n[["name"]]
+            }
+        ),
+        collapse = "; "
+    )
+    return(data)
 }
 
-#' build_df
-#'
-#' Compile results from `get_metadata` into a tidy object
-#'
-#' @param x an output from get_metadata
-#'
-#' @export
-pubmed$build_df <- function(x) {
-    x %>%
-        # clean publication data and prepare html attributes for
-        # doi link
-        mutate(
-            sortpubdate = lubridate::ymd_hm(sortpubdate) %>%
-                as.Date(.),
-            doi_url = stringr::str_replace_all(
-                string = elocationId,
-                pattern = "doi: ",
-                replacement = "https://doi.org/"
-            ),
-            doi_label = stringr::str_replace_all(
-                string = elocationId,
-                pattern = "doi: ",
-                replacement = ""
-            )
-        ) %>%
-        select(-elocationId) %>%
-        arrange(desc(sortpubdate)) %>%
-        mutate(
-            sortpubdate = lubridate::year(sortpubdate),
-            html_order = rev(seq_len(length(uid)))
-        )
+# build_df
+# Compile results from `get_metadata` into a tidy object
+pubmed$build_df <- function(data) {
+    d <- data
+    d$uid <- as.character(d$uid)
+    d$sortpubdate <- as.Date(lubridate::ymd_hm(d$sortpubdate))
+    d$doi_url <- stringr::str_replace_all(
+        string = d$elocationId,
+        pattern = "doi: ",
+        replacement = "https://doi.org/"
+    )
+    d$doi_label <- stringr::str_replace_all(
+        string = d$elocationId,
+        pattern = "doi: ",
+        replacement = ""
+    )
+    d$elocationId <- NULL
+    d <- d[order(d$sortpubdate, decreasing = TRUE), ]
+    d$sortpubdate <- as.character(d$sortpubdate)
+    return(d)
 }
 
 #' build_html
@@ -212,7 +154,7 @@ pubmed$build_html <- function(x) {
             htmltools::tags$li(
                 class = "pub",
                 `data-uid` = x[["uid"]][[d]],
-                `data-item` = x[["html_order"]][[d]],
+                # `data-item` = x[["html_order"]][[d]],
                 `data-pub-year` = x[["year"]][[d]],
                 htmltools::tags$span(
                     class = "pub-data pub-title",

@@ -39,14 +39,13 @@ emx$attributes <- tibble::tribble(
     ~entity,    ~name,             ~description,               ~dataType,
     # --------|------------------|---------------------------|-------------|
     "records", "uid",             "pubmed idenitifer",          "string",
-    "records", "sortpubdate",     "year of publication",        "int",
+    "records", "sortpubdate",     "year of publication",        "string",
     "records", "fulljournalname", "journal title",              "string",
-    "records", "volume",          "publication volume",         "int",
+    "records", "volume",          "publication volume",         "string",
     "records", "title",           "article title",              "text",
     "records", "authors",         "all authors collapsed",      "text",
     "records", "doi_url",         "doi url for html href",      "hyperlink",
     "records", "doi_label",       "url link label",             "string",
-    "records", "html_order",      "int for html purposes only", "int",
     "queries", "id",              "a auto generated ID",        "string",
     "queries", "type",            "a general grouping",         "string",
     "queries", "query",           "query to run",               "string"

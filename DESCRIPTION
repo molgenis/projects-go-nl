@@ -1,0 +1,27 @@
+Package: molgenis-go-nl
+Title: This is not a Real R Package
+Version: 0.0.0.9000
+Authors@R: 
+    person(given = "First",
+           family = "Last",
+           role = c("aut", "cre"),
+           email = "first.last@example.com",
+           comment = c(ORCID = "YOUR-ORCID-ID"))
+Description: This is a fake R Package. The project structure is necessary for
+    running GitHub Actions.
+License: `use_mit_license()`, `use_gpl3_license()` or friends to
+    pick a license
+Encoding: UTF-8
+LazyData: true
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.1
+Imports: 
+    httr,
+    cli,
+    rjson,
+    purrr,
+    dplyr,
+    stringr,
+    lubridate,
+    readr,
+    jsonlite
