@@ -2,7 +2,7 @@
 #' FILE: emx_create_04_static_content.R
 #' AUTHOR: David Ruvolo
 #' CREATED: 2020-11-20
-#' MODIFIED: 2020-12-21
+#' MODIFIED: 2021-02-19
 #' PURPOSE: create GoNL EMX for static content
 #' STATUS: working
 #' PACKAGES: readr; dplyr
@@ -18,7 +18,7 @@ suppressPackageStartupMessages(library(dplyr))
 #' collapse into a single string and apply regex
 #' transform to data.frame(
 #' save as `.tsv` file
-readLines("./src/home/index.html", warn = FALSE) %>%
+readLines("./public/home/index.html", warn = FALSE) %>%
     paste0(., collapse = "\n") %>%
     stringr::str_replace_all(
         string = .,
