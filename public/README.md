@@ -9,11 +9,14 @@ In this subdirectory, you can find all of the custom molgenis apps used in the n
 | download_data | live     | information on downloading GoNL data                        |
 | home\*        | live     | main home page                                              |
 | news          | live     | announcements, events, etc.                                 |
-| publist       | live     | Vue template for dynamically updating publications          |
+| publist\*\*   | live     | Vue template for dynamically updating publications          |
 | request       | live     | information about the data request process, links to podium |
 | publications  | archived | list of publications                                        |
 
-\***Note**: The `home` app doesn't follow the same structure as the other apps. The html file (`home/index.html`) is read by `emx_create_04_static_content.R` and saved as `data/sys_StaticContent.tsv`.
+Notes:
+
+\* The `home` app doesn't follow the same structure as the other apps. The html file (`home/index.html`) is read by `emx_create_04_static_content.R` and saved as `data/sys_StaticContent.tsv`.
+\*\* The publist app is a Vue application. You will need to have Node and npm installed on your machine. The zipped molgenis application is located in `publist/zip/*` (see public/publist/README.md for more information).
 
 ## Getting Started
 
