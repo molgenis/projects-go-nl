@@ -90,4 +90,4 @@ openxlsx::writeData(wb, "publications_queries", emx$queries)
 openxlsx::saveWorkbook(wb, "data/pubdata/publications.xlsx", overwrite = TRUE)
 
 #' write emx package
-# write.csv(emx$package, "data/pubdata/sys_md_Package.csv", row.names = FALSE)
+#' write.csv(emx$package, "data/pubdata/sys_md_Package.csv", row.names = FALSE)
