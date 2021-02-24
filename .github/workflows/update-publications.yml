@@ -58,6 +58,7 @@ jobs:
           remotes::install_cran("rcmdcheck")
         shell: Rscript {0}
 
+      # run R scripts
       - name: Query Publications
         env:
           MOLGENIS_TOKEN: ${{ secrets.MOLGENIS_TOKEN }}
@@ -66,7 +67,9 @@ jobs:
           source("R/pubmed_update.R")
         shell: Rscript {0}
 
+      # commit changes; force no error if no new changes
       - name: Commit
+        continue-on-error: true
         run: |
           git config --local user.email "actions@github.com"
           git config --local user.name "GitHub Actions"
