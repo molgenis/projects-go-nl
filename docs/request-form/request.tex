@@ -1,5 +1,4 @@
 \documentclass[a4paper,12pt]{article}
-
 \usepackage[margin=0.5in]{geometry}
 \usepackage{parskip}
 \usepackage{fancyhdr}
@@ -9,6 +8,7 @@
 \usepackage{graphicx}
 \usepackage{hyperref}
 \usepackage{colortbl,xcolor, color}
+\usepackage{multirow}
 
 \definecolor{lightgrey}{RGB}{250,250,250}
 
@@ -41,6 +41,9 @@
   backgroundcolor=lightgrey,
   borderstyle=S
 }
+
+\renewcommand\LayoutCheckField[2]{#2#1}
+\fboxsep=2pt
 
 \begin{document}
 
@@ -141,21 +144,19 @@ If \emph{Yes}, please specific official IRM or METc.
 
 \textbf{8. Indicate which datasets you would like to apply for}
 
-\begin{tabular}{l l}
-  \CheckBox[name=snvCalls]{} & SNV calls (498 unrelated parents and 249 children) \\
-  \CheckBox[name=indelCalls]{} & INDEL calls (498 unrelated parents and 249 children) \\
-  \CheckBox[name=imputationReadyHaplotypes]{} & Imputation-ready haplotypes (SNVs + INDELs) (998 haplotypes) \\
-  \CheckBox[name=svCalls]{} & SV calls (> 20bp) \\
-  \CheckBox[name=trioBamFiles]{} & trio-BAM files (249 trios, 498 unrelated parents, 249 children) \\
-  \CheckBox[name=unalignedFastqFiles]{} & unaligned fastq files (750 samples) \\
-  \CheckBox[name=other]{} & Other, describe below \\
-\end{tabular}
+Age, sex and family structure is included in the data access.
+\begin{itemize}
+  \item[] \CheckBox[name=testYes]{\ignorespaces} \textbf{Raw data} \\
+    \-\hspace{7mm}trio-BAM files (249 trios, 498 unrelated parents, 249 children) \\
+    \-\hspace{7mm}unaligned fastq files (750 samples) \\
+  \item[] \CheckBox[name=testNo]{\ignorespaces} \textbf{Analysed data} \\
+    \-\hspace{7mm}SNV calls (498 unrelated parents and 249 children) \\
+    \-\hspace{7mm}INDEL calls (498 unrelated parents and 249 children) \\
+    \-\hspace{7mm}Imputation-ready haplotypes (SNVs + INDELs) (998 haplotypes) \\
+    \-\hspace{7mm}SV calls (> 20bp) \\
+\end{itemize}
 
-If \emph{Other Data} is requested, please describe below.
-
-\TextField[name=otherDataDescription,multiline=true,height=12\baselineskip]{}
-
-\textbf{Note:} Twin data cannot be requested in light of privacy concerns. Age, sex and family structure is included in the data access.
+\textbf{Note}: Twin data and geographical information cannot be requested in light of privacy concerns.
 
 \section*{Resources, Feasibility and Expertise}
 
@@ -171,7 +172,7 @@ If \emph{Yes}, please describe your experience and expertise, and that of your c
 
 \TextField[name=resourcesExperience,multiline=true,height=9\baselineskip]{}
 
-\vspace{10mm}
+\newpage
 
 \textbf{10. Recent Publications}
 
@@ -183,7 +184,7 @@ Please provide a list of recent publications (max. 10)
 
 11. Please declare that you have read and agree to abide by the terms and conditions outlined in the GoNL data access agreement (which you will need to sign on approval of this project), by ticking the following box.
 
-\ChoiceMenu[name=hasAgreedToAccessConditions,radio,radiosymbol=\ding{52}]{}{=Yes} Yes, I have read and agreed to the \href{https://go-nl.molgeniscloud.org/api/files/aaaac5wx7sgqv6qwh32jd7yaai?alt=media}{GoNL Data Access Agreement}.
+\ChoiceMenu[name=hasAgreedToAccessConditions,radio,radiosymbol=\ding{52}]{}{=Yes} Yes, I have read and agreed to the \href{https://nlgenome.nl/api/files/aaaac6lzvpcop6qwh32jd7yaae?alt=media}{GoNL Data Access Agreement}.
 
 \ChoiceMenu[name=hasAgreedToAccessConditions,radio,radiosymbol=\ding{52}]{}{=No} No
 
