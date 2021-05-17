@@ -36,7 +36,7 @@
   borderstyle=S
 }
 
-\def\DefaultOptionsChoiceMenu{
+\def\DefaultOptionsofChoiceMenu{
   bordercolor=gray,
   backgroundcolor=lightgrey,
   borderstyle=S
@@ -46,6 +46,7 @@
 
 \fancypagestyle{plain}{%
   \renewcommand{\headrulewidth}{0pt}%
+  \renewcommand\footrule{\hrule width \hsize \kern 1mm}%
   \fancyhf{}%
   \fancyfoot[l]{\footnotesize GoNL Data Access Request}
   \fancyfoot[c]{\footnotesize v1.0}
@@ -55,27 +56,26 @@
 
 \pagestyle{plain}
 
-\includegraphics[scale=0.3]{gonl.png}
+\begin{flushright}
+  \includegraphics[scale=0.3]{gonl.png}
+\end{flushright}
 
 \vspace{0.6cm}
 
-{\fontsize{21}{10}\selectfont GoNL Data Access Request Application}
+\begin{center}
+  {\fontsize{21}{10}\selectfont Data Access Request Application}
+\end{center}
 
 
-\section*{Instructions for Requesting Data}
+\section*{Instructions}
 
-Individual level sequence data and/or variant calls can be requested. 
-
-\begin{enumerate}
-  \item To apply for access, fill in the form below and send to \href{mailto:gonl@bbmri.nl}{gonl@bbmri.nl}.
-  \item Your research request will be evaluated by the GoNL steering committee. If your request has been successful, you will be sent the \href{https://go-nl.molgeniscloud.org/api/files/aaaac5wx7sgqv6qwh32jd7yaai?alt=media}{Data Access Agreement}. This agreement requires signatures from the applicant and a legal representative of the applicant’s institution. 
-  \item Once the agreement is finalized, you will be granted access to the data using a suitable method. 
-  \item At the time of publication, add the suitable acknowledgement. Consult the \href{https://go-nl.molgeniscloud.org/api/files/aaaac5z7aijfr6qwh32jd7yaae?alt=media}{GoNL Publication Acknowledgement} guide for more information.
-\end{enumerate}
+Individual level sequence data and/or variant calls can be requested. To apply for access, fill in the form below and send to \href{mailto:gonl@bbmri.nl}{gonl@bbmri.nl}. Your research request will be evaluated by the GoNL steering committee. If your request has been successful, you will be sent the \href{https://nlgenome.nl/api/files/aaaac6lzvpcop6qwh32jd7yaae?alt=media}{Data Access Agreement}. This agreement requires signatures from the applicant and a legal representative of the applicant’s institution. Once the agreement is finalized, you will be granted access to the data using a suitable method. At the time of publication, add the suitable acknowledgement. Consult the \href{https://nlgenome.nl/api/files/aaaac5z7aijfr6qwh32jd7yaae?alt=media}{GoNL Publication Acknowledgement} guide for more information.
 
 \begin{Form}
 
 \section*{Applicant Information}
+
+Enter information about yourself and all co-applicants (if applicable).
 
 \textbf{1. Name}
 
@@ -89,15 +89,15 @@ Individual level sequence data and/or variant calls can be requested.
 
 Enter employment information or affiliation with any other organisation.
 
-\TextField[name=applicantAffiliation,multiline=true]{}
+\TextField[name=applicantAffiliation,multiline=true,height=8\baselineskip]{}
+
+\newpage
 
 \textbf{4. Co-applicants}
 
 Include full postal and email address for each co-applicant.
 
-\TextField[name=coapplicants,multiline=true,height=14\baselineskip]{}
-
-\newpage
+\TextField[name=coapplicants,multiline=true,height=24\baselineskip]{}
 
 \section*{Research Question}
 
@@ -123,16 +123,15 @@ Please describe the study in no more than 750 words.
 
 \TextField[name=studyDescription,multiline=true,height=30\baselineskip]{}
 
-\newpage
-
 \section*{Consent and Approvals}
 
 \textbf{7. Have you obtained all required consent and approvals where applicable?}
 
 If your proposed use of Project Data involves use of your own data, please confirm that you have obtained all approvals required by the rules and regulations of your jurisdiction, including your institution’s institutional rules, and the consent of your data subjects, for your use of your own data in the study, by ticking the following box:
 
-\ChoiceMenu[name=hasConsent,radio,radiosymbol=\ding{52}]{}{Yes}\linebreak
-\ChoiceMenu[name=hasConsent,radio,radiosymbol=\ding{52}]{}{No}
+\ChoiceMenu[name=hasConsent,radio,radiosymbol=\ding{52}]{}{=Yes} Yes, I have approval to carry out the proposed research
+
+\ChoiceMenu[name=hasConsent,radio,radiosymbol=\ding{52}]{}{=No} No
 
 If \emph{Yes}, please specific official IRM or METc.
 
@@ -158,38 +157,35 @@ If \emph{Other Data} is requested, please describe below.
 
 \textbf{Note:} Twin data cannot be requested in light of privacy concerns. Age, sex and family structure is included in the data access.
 
-\newpage
-
 \section*{Resources, Feasibility and Expertise}
 
 \textbf{9. Have you secured funding?}
 
 Please confirm that you have secured funding for your proposed use of the Project Data and that you will carry out your research within a reasonable period of time after the granting of this application.
 
-\ChoiceMenu[name=hasResources,radio,radiosymbol=\ding{52}]{}{Yes}\linebreak
-\ChoiceMenu[name=hasResources,radio,radiosymbol=\ding{52}]{}{No}
+\ChoiceMenu[name=hasResources,radio,radiosymbol=\ding{52}]{}{=Yes} Yes, I have funding to carry out the proposed research
+
+\ChoiceMenu[name=hasResources,radio,radiosymbol=\ding{52}]{}{=No} No
 
 If \emph{Yes}, please describe your experience and expertise, and that of your collaborators, and how this will be applied to the proposed study (in 250 words).
 
-\TextField[name=resourcesExperience,multiline=true,height=10\baselineskip]{}
+\TextField[name=resourcesExperience,multiline=true,height=9\baselineskip]{}
+
+\vspace{10mm}
 
 \textbf{10. Recent Publications}
 
 Please provide a list of recent publications (max. 10)
 
-\TextField[name=publications,multiline=true,height=28\baselineskip]{}
-
-\newpage
+\TextField[name=publications,multiline=true,height=38\baselineskip]{}
 
 \section*{Access Conditions}
 
 11. Please declare that you have read and agree to abide by the terms and conditions outlined in the GoNL data access agreement (which you will need to sign on approval of this project), by ticking the following box.
 
-\ChoiceMenu[name=hasAgreedToAccessConditions,radio,radiosymbol=\ding{52}]{\mbox{}}{\null} Yes I have read and agreed to the \href{https://go-nl.molgeniscloud.org/api/files/aaaac5wx7sgqv6qwh32jd7yaai?alt=media}{GoNL Data Access Agreement}.
+\ChoiceMenu[name=hasAgreedToAccessConditions,radio,radiosymbol=\ding{52}]{}{=Yes} Yes, I have read and agreed to the \href{https://go-nl.molgeniscloud.org/api/files/aaaac5wx7sgqv6qwh32jd7yaai?alt=media}{GoNL Data Access Agreement}.
 
-\ChoiceMenu[name=hasAgreedToAccessConditions,radio,radiosymbol=\ding{52}]{\mbox{}}{\null} No
-
-
+\ChoiceMenu[name=hasAgreedToAccessConditions,radio,radiosymbol=\ding{52}]{}{=No} No
 
 \end{Form}
 \end{document}
