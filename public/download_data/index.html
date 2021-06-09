@@ -38,7 +38,7 @@
 		<h3 class="h4" id="snvs-current-release-title">Current release</h3>
 		<section aria-labelledby="snvs-current-release-title">
 			<ul>
-				<li><a href="http://molgenis26.target.rug.nl/downloads/gonl_public/variants/release5/">GoNL SNPs and Indels release 5</a>: Summary counts of SNV and small indels &lt;20bp from only the parents (498 individuals)</li>
+				<li><a href="http://molgenis26.gcc.rug.nl/downloads/gonl_public/variants/release5/">GoNL SNPs and Indels release 5</a>: Summary counts of SNV and small indels &lt;20bp from only the parents (498 individuals)</li>
 			</ul>
 		</section>
 		<h3 class="h4" id="snvs-older-release-title">Older releases</h3>
@@ -72,7 +72,7 @@
 		<section aria-labelledby="indels-current-release-title">
 			<ul>
 				<li>
-					<a href="http://molgenis26.target.rug.nl/downloads/gonl_public/variants/release5/">GoNL SNPs and Indels release 5</a>: Summary counts of SNV and small indels &lt;20bp from only the parents (498 individuals)
+					<a href="http://molgenis26.gcc.rug.nl/downloads/gonl_public/variants/release5/">GoNL SNPs and Indels release 5</a>: Summary counts of SNV and small indels &lt;20bp from only the parents (498 individuals)
 				</li>
 			</ul>
 		</section>
@@ -82,7 +82,7 @@
 		<h3 class="h4" id="sv-current-release">Current Release</h3>
 		<section aria-labelledby="sv-current-release">
 			<ul>
-				<li><a href="http://molgenis26.target.rug.nl/downloads/gonl_public/variants/release6.1/">GoNL SV release 6.1</a>: Summary counts of SVs and sequence for novel segments.</li>
+				<li><a href="http://molgenis26.gcc.rug.nl/downloads/gonl_public/variants/release6.1/">GoNL SV release 6.1</a>: Summary counts of SVs and sequence for novel segments.</li>
 			</ul>
 			<p>The following pipeline was used to call the indels and structural variants:</p>
 			<p>Twelve tools representing five different algorithmic approaches of variant calling (gapped alignment, split-read mapping, discordant read pairs, read depth, de novo assembly) were used: Pindel, GATK UnifiedGenotyper, GATK HaplotypeCaller, 123SV, BreakDancer, DWAC-Seq, CNVNator, FAÇADE, Mate-Clever, GenomeSTRiP, SOAPdenovo de novo assembly, Mobster. Calls from each of the methods were filtered according to the method best practices. Publicly available data contains:</p>
@@ -96,7 +96,7 @@
 		<h3 id="svs-old-release-title">Old Release</h3>
 		<section aria-labelledby="svs-old-release-title">
 			<ul>
-				<li><a href="http://molgenis26.target.rug.nl/downloads/gonl_public/variants/release5/">GoNL SV release 5</a>: Summary counts of consensus deletion regions &gt;=20 basepairs in size from only the parents (498 individuals)</li>
+				<li><a href="http://molgenis26.gcc.rug.nl/downloads/gonl_public/variants/release5/">GoNL SV release 5</a>: Summary counts of consensus deletion regions &gt;=20 basepairs in size from only the parents (498 individuals)</li>
 				<li><a href="http://www.genoomvannederland.nl/wp-content/uploads/2013/04/100bp_common_deletions_21022013.anonymized.txt.gz">GoNL SV release 1</a>: Summary counts of consensus deletion regions 100 basepairs and larger in size in txt format</li>
 			</ul>
 			<p>The files contain 27.8k SV calls (&gt;20bp). Calling was realized using 10 different approaches (see below) and a consensus strategy was used to produce this set. The SOURCE field in the INFO column lists all methods that called each of the events. As most methods do not report genotypes but rather presence/absence of an SV in an individual, we report here either a homozygous reference (0/0) in case of the absence of SV or a genotype with one alternative allele and one unknown allele (./1) in case of the presence of a SV.</p>
@@ -112,19 +112,19 @@
 	<h2 id="mutation-map-title"><em>De novo</em> mutations and mutation rate map</h2>
 	<section aria-labelledby="mutation-map-title">
 		<p>
-			A total of 11,020 <i>de novo</i> mutations were called in the 250 families from GoNL, representing the largest set of human mutations to date, and the first in healthy individuals. The list of de novo mutations is available as a tab-delimited file here: <a title="GoNL_DNMs.txt" href="https://molgenis26.target.rug.nl/downloads/gonl_public/variants/release5.2/GoNL_DNMs.txt">GoNL_DNMs.txt</a>
+			A total of 11,020 <i>de novo</i> mutations were called in the 250 families from GoNL, representing the largest set of human mutations to date, and the first in healthy individuals. The list of de novo mutations is available as a tab-delimited file here: <a title="GoNL_DNMs.txt" href="https://molgenis26.gcc.rug.nl/downloads/gonl_public/variants/release5.2/GoNL_DNMs.txt">GoNL_DNMs.txt</a>
 			</p>
 		<p>
-			We analysed the distribution of these mutations throughout the genome and used this information in a model based on human-chimpanzee divergence rates and including local sex-averaged recombination rates (<a href="http://genome.ucsc.edu/cgi-bin/hgTables?hgsid=376443467_yG7cbT7wZ7XF65eqi3aoaB3cl6fv&amp;clade=mammal&amp;org=Human&amp;db=hg19&amp;hgta_group=map&amp;hgta_track=decodeRmap&amp;hgta_table=0&amp;hgta_regionType=genome&amp;position=chr1%3A1000170-1000170&amp;hgta_outputType=primaryTable&amp;hgta_outFileName=hapmap.CEU.avg" target="_blank" rel="noopener">UCSC deCODE track</a>),  mutation type and transcribed/non-transcribed strand in coding regions to create a genome-wide human mutation rate map. We defined 2,339 1Mb non-overlapping windows across the genome after excluding windows where (1) &gt;10% of the window lacked recombination rates, or (2) the average sex-averaged local recombination rate across the window equals to 0 cM/Mb or is greater than 3 cM/Mb, (3) the primate local substitution rate was estimated to be 0 or extremely high, or (4) more than 80% of the window has less than 90% estimated <i>de novo</i> mutation calling sensitivity. The data is provided as <a href="http://genome.ucsc.edu/FAQ/FAQformat.html#format1" target="_blank" rel="noopener">BED</a> formatted files. The neutral mutation rates are available as either normalized to a total mutation rate of 1.2 x 10<sup>-8</sup> (<a href="https://molgenis26.target.rug.nl/downloads/gonl_public/mutation_rate_map/release2/local_mutation_rate.bias_corrected.SEXAVG.bed">local_mutation_rate.bias_corrected.SEXAVG.bed</a>).
+			We analysed the distribution of these mutations throughout the genome and used this information in a model based on human-chimpanzee divergence rates and including local sex-averaged recombination rates (<a href="http://genome.ucsc.edu/cgi-bin/hgTables?hgsid=376443467_yG7cbT7wZ7XF65eqi3aoaB3cl6fv&amp;clade=mammal&amp;org=Human&amp;db=hg19&amp;hgta_group=map&amp;hgta_track=decodeRmap&amp;hgta_table=0&amp;hgta_regionType=genome&amp;position=chr1%3A1000170-1000170&amp;hgta_outputType=primaryTable&amp;hgta_outFileName=hapmap.CEU.avg" target="_blank" rel="noopener">UCSC deCODE track</a>),  mutation type and transcribed/non-transcribed strand in coding regions to create a genome-wide human mutation rate map. We defined 2,339 1Mb non-overlapping windows across the genome after excluding windows where (1) &gt;10% of the window lacked recombination rates, or (2) the average sex-averaged local recombination rate across the window equals to 0 cM/Mb or is greater than 3 cM/Mb, (3) the primate local substitution rate was estimated to be 0 or extremely high, or (4) more than 80% of the window has less than 90% estimated <i>de novo</i> mutation calling sensitivity. The data is provided as <a href="http://genome.ucsc.edu/FAQ/FAQformat.html#format1" target="_blank" rel="noopener">BED</a> formatted files. The neutral mutation rates are available as either normalized to a total mutation rate of 1.2 x 10<sup>-8</sup> (<a href="https://molgenis26.gcc.rug.nl/downloads/gonl_public/mutation_rate_map/release2/local_mutation_rate.bias_corrected.SEXAVG.bed">local_mutation_rate.bias_corrected.SEXAVG.bed</a>).
 		</p>
 		<p>
-			In addition, we computed the mutation rate for coding sequences of autosomal protein-coding transcripts were downloaded from <a href="http://www.ensembl.org/index.html" target="_blank" rel="noopener">Ensembl</a> v74. In total, we could compute the mutation rates for 54,310 transcripts (out of 78,818), including 15,462 canonical transcripts (out of 19,270). The canonical transcript was defined as the transcript of longest coding sequence length for each gene. The genomic window i of each transcript was determined by the genomic coordinate of midpoint between transcription start and end sites. For each transcript, all potential nonsense, missense and silent mutations were scanned with respect to reference sequence, and their mutation rates were aggregated over the sequence. The data is provided as tab-delimited files and contains mutation rates for synonymous, missense and nonsense mutations separately. Similarly to the whole-genome data, the neutral mutation rates are available as either normalized to a total mutation rate of 1.2 x 10<sup>-8</sup> (All: <a href="https://molgenis26.target.rug.nl/downloads/gonl_public/mutation_rate_map/release2/functional_mut_rate.bias_corrected.local.bed">functional_mut_rate.bias_corrected.local.bed</a>, Canonical only: <a href="https://molgenis26.target.rug.nl/downloads/gonl_public/mutation_rate_map/release2/functional_mut_rate.bias_corrected.local.canonical_tx_only.bed">functional_mut_rate.bias_corrected.local.canonical_tx_only.bed</a>).
+			In addition, we computed the mutation rate for coding sequences of autosomal protein-coding transcripts were downloaded from <a href="http://www.ensembl.org/index.html" target="_blank" rel="noopener">Ensembl</a> v74. In total, we could compute the mutation rates for 54,310 transcripts (out of 78,818), including 15,462 canonical transcripts (out of 19,270). The canonical transcript was defined as the transcript of longest coding sequence length for each gene. The genomic window i of each transcript was determined by the genomic coordinate of midpoint between transcription start and end sites. For each transcript, all potential nonsense, missense and silent mutations were scanned with respect to reference sequence, and their mutation rates were aggregated over the sequence. The data is provided as tab-delimited files and contains mutation rates for synonymous, missense and nonsense mutations separately. Similarly to the whole-genome data, the neutral mutation rates are available as either normalized to a total mutation rate of 1.2 x 10<sup>-8</sup> (All: <a href="https://molgenis26.gcc.rug.nl/downloads/gonl_public/mutation_rate_map/release2/functional_mut_rate.bias_corrected.local.bed">functional_mut_rate.bias_corrected.local.bed</a>, Canonical only: <a href="https://molgenis26.gcc.rug.nl/downloads/gonl_public/mutation_rate_map/release2/functional_mut_rate.bias_corrected.local.canonical_tx_only.bed">functional_mut_rate.bias_corrected.local.canonical_tx_only.bed</a>).
 			</p>
 		<h3 class="h4" id="mutations-map-release-title">Current Release</h3>
 		<section aria-labelledby="mutations-map-release-title">
 			<ul>
 				<li>
-					<a href="https://molgenis26.target.rug.nl/downloads/gonl_public/mutation_rate_map/release2/">GoNL mutation rate map release 2</a>
+					<a href="https://molgenis26.gcc.rug.nl/downloads/gonl_public/mutation_rate_map/release2/">GoNL mutation rate map release 2</a>
 				</li>
 		</ul>
 			<p>

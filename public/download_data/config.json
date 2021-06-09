@@ -1,7 +1,7 @@
 {
     "label": "GoNL download",
     "description": "GoNL download",
-    "version": "v1.0.0",
+    "version": "v1.1.0",
     "apiDependency": "v2",
     "name": "download",
     "includeMenuAndFooter": true,
