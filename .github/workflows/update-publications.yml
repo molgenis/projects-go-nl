@@ -1,4 +1,4 @@
-name: Update Publications via Pubmed API
+name: Refresh Publications
 on:
   schedule:
    - cron: "0 9 1 * *" # every friday at 09:00 
