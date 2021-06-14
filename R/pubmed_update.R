@@ -82,6 +82,35 @@ if (pubs_response$status_code == 200) {
     data <- NA
 }
 
+
+#' ~ 1c ~
+#' Fetch Exclusions Data
+exclusions_response <- httr::GET(
+    url = paste0(molgenis$host, "/api/v1/publications_exclusions"),
+    httr::add_headers(
+        `x-molgenis-token` = molgenis$token
+    )
+)
+
+# process response
+if (exclusions_response$status_code == 200) {
+    cli::cli_alert_success("Imported exclusions entity")
+    exclusions <- httr::content(
+        x = exclusions_response,
+        as = "text",
+        encoding = "UTF-8"
+    ) %>%
+        jsonlite::fromJSON(.) %>%
+        `[[`("items")
+
+    if (NROW(data) > 0) {
+        exclusions$href <- NULL
+    }
+} else {
+    cli::cli_alert_danger("Failed to import exclusions entity")
+    exclusions <- NA
+}
+
 #'//////////////////////////////////////
 
 #' ~ 2 ~
@@ -112,6 +141,7 @@ if (NROW(queries$query) > 1) {
 #' ~ 2b ~
 # remove existing IDs from api ID query list
 api$ids <- api$ids[!api$ids %in% data$uid]
+api$ids <- api$ids[!api$ids %in% exclusions$uid]
 
 if (length(api$ids) == 0) {
     cli::cli_alert_success("Publication records are up to date!")
