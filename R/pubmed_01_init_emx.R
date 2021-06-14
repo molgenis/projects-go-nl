@@ -25,12 +25,13 @@ emx$package <- data.frame(
 
 #' define entities
 emx$entities <- data.frame(
-    name = c("records", "queries"),
-    label = c("Publication Records", "API Queries"),
+    name = c("records", "queries", "exclusions"),
+    label = c("Publication Records", "API Queries", "Records to Exclude"),
     package = "publications",
     description = c(
         "History of Publications and Acknowledgements",
-        "Pubmed API queries used to update publication records"
+        "Pubmed API queries used to update publication records",
+        "List of records to remove that aren't related to the GoNL consortium"
     )
 )
 
@@ -48,7 +49,10 @@ emx$attributes <- tibble::tribble(
     "records", "doi_label",       "url link label",             "string",
     "queries", "id",              "a auto generated ID",        "string",
     "queries", "type",            "a general grouping",         "string",
-    "queries", "query",           "query to run",               "string"
+    "queries", "query",           "query to run",               "string",
+    "exclusions", "uid",          "pubmed identifier",          "string",
+    "exclusions", "reason",       "reason for excluding",       "text",
+    "exclusions", "date_created", "date entry was created",     "date"
 ) %>%
     mutate(
         entity = paste0("publications_", entity),
@@ -76,15 +80,15 @@ wb <- openxlsx::createWorkbook()
 openxlsx::addWorksheet(wb, "packages")
 openxlsx::addWorksheet(wb, "entities")
 openxlsx::addWorksheet(wb, "attributes")
-openxlsx::addWorksheet(wb, "publications_records")
-openxlsx::addWorksheet(wb, "publications_queries")
+# openxlsx::addWorksheet(wb, "publications_records")
+# openxlsx::addWorksheet(wb, "publications_queries")
 
 #' write data
 openxlsx::writeData(wb, "packages", emx$package)
 openxlsx::writeData(wb, "entities", emx$entities)
 openxlsx::writeData(wb, "attributes", emx$attributes)
-openxlsx::writeData(wb, "publications_records", emx$records)
-openxlsx::writeData(wb, "publications_queries", emx$queries)
+# openxlsx::writeData(wb, "publications_records", emx$records)
+# openxlsx::writeData(wb, "publications_queries", emx$queries)
 
 #' save workbook
 openxlsx::saveWorkbook(wb, "data/pubdata/publications.xlsx", overwrite = TRUE)
