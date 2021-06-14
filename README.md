@@ -1,3 +1,5 @@
+[![Refresh Publications](https://github.com/molgenis/molgenis-go-nl/actions/workflows/update-publications.yml/badge.svg)](https://github.com/molgenis/molgenis-go-nl/actions/workflows/update-publications.yml)
+
 ![Genome of the Netherlands proejct](src/images/gonl.png)
 
 # GoNL Molgenis Server
