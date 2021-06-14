@@ -5,9 +5,11 @@
     "dev": "vite",
     "build": "vite build",
     "serve": "vite preview",
-    "zip": "rm -rf zip/* && cp -r dist/* zip/ && cp config.json zip/ && cd zip/ && zip publist.zip * assets/*"
+    "release": "rm -rf zip/* && cp -r dist/* zip/ && cp config.json zip/ && cd zip/ && zip publist.zip * assets/*"
   },
   "dependencies": {
+    "sass": "^1.34.1",
+    "sass-loader": "^12.1.0",
     "vue": "^3.0.5"
   },
   "devDependencies": {

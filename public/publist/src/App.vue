@@ -3,30 +3,33 @@ import Publication from "./components/Publication.vue";
 </script>
 
 <template>
-  <h1>Publications</h1>
-  <p>
-    Here you can find a list of recent publications. If you would like to add
-    you publication to this list, make sure it is available on
-    <a
-      href="http://www.ncbi.nlm.nih.gov/pubmed?term=Genome+of+the+Netherlands+Consortium[Corporate+Author]"
-    >
-      PubMed</a
-    >
-    and contact the GoNL consortium.
-  </p>
-  <ol class="publication-list" reversed>
-    <Publication v-for="pub in pubs" :pub="pub" />
-  </ol>
+  <div id="publist-container">
+    <h1 class="h1">Publications</h1>
+    <p>
+      In the list below, you can view all publications associated with GoNL
+      consortium. If you would like to add you publication to this list, make
+      sure you have given suitable acknowledgement (<a
+        href="https://nlgenome.nl/api/files/aaaac5z7aijfr6qwh32jd7yaae?alt=media"
+        >GoNL Publication Acknowledgment document (PDF, 139KB)</a
+      >) and contact the GoNL consortium.
+    </p>
+    <ol v-if="pubs" class="publication-list" reversed>
+      <Publication v-for="pub in pubs" v-bind:key="pub.uid" v-bind:pub="pub" />
+    </ol>
+    <p v-else><strong>Error:</strong> {{ error }}</p>
+  </div>
 </template>
 
-<style>
+<style lang="scss">
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   margin: 0 auto;
-  margin-top: 60px;
+  padding-top: 60px;
   max-width: 972px;
+  min-height: 100vh;
+  font-size: 16pt;
 }
 </style>
 
@@ -35,6 +38,7 @@ export default {
   data: function () {
     return {
       pubs: null,
+      error: null,
     };
   },
   methods: {
@@ -59,7 +63,14 @@ export default {
           });
         })
         .catch((error) => {
-          console.error("Failed to get Publications:", error);
+          let msg = `Unable to retrieve publications at this time (${error.status}`;
+          if (error.statusText) {
+            msg = `${msg} ${error.statusText})`;
+          } else {
+            msg = `${msg})`;
+          }
+          this.error = msg;
+          console.log(error);
         });
     },
   },

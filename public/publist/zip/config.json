@@ -1,0 +1,11 @@
+{
+    "label": "Publication List",
+    "description": "A vue app for dynamically rendering publications",
+    "version": "v1.0.0",
+    "apiDependency": "v2",
+    "name": "publist",
+    "includeMenuAndFooter": true,
+    "runtimeOptions": {
+        "language": "en"
+    }
+}
