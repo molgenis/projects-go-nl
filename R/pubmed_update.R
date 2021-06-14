@@ -140,8 +140,7 @@ if (NROW(queries$query) > 1) {
 
 #' ~ 2b ~
 # remove existing IDs from api ID query list
-api$ids <- api$ids[!api$ids %in% data$uid]
-api$ids <- api$ids[!api$ids %in% exclusions$uid]
+api$ids <- api$ids[!api$ids %in% c(data$uid, exclusions$uid)]
 
 if (length(api$ids) == 0) {
     cli::cli_alert_success("Publication records are up to date!")
