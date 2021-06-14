@@ -123,7 +123,7 @@ api <- list()
 # Run queries to identify new publications
 if (NROW(queries$query) > 1) {
     cli::cli_alert_info(
-        "Fetching publication IDs (queries: {.val { NROW(queries$query) }} )"
+        "Fetching publication IDs (n queries: {.val { NROW(queries$query) }} )"
     )
     api$ids <- unlist(
         lapply(
@@ -134,13 +134,16 @@ if (NROW(queries$query) > 1) {
         )
     )
 } else {
-    cli::cli_alert_info("Fetching publication IDs (queries: {.val 1})")
+    cli::cli_alert_info("Fetching publication IDs (n queries: {.val 1})")
     api$ids <- pubmed$get_ids(queries$query)
 }
 
 #' ~ 2b ~
 # remove existing IDs from api ID query list
-api$ids <- api$ids[!api$ids %in% c(data$uid, exclusions$uid)]
+cli::cli_alert_info("Returned {.val {length(api$ids)}} publication IDs")
+api$ids <- api$ids[
+    !api$ids %in% c(data$uid, exclusions$uid) & !duplicated(api$ids)
+]
 
 if (length(api$ids) == 0) {
     cli::cli_alert_success("Publication records are up to date!")
@@ -169,18 +172,15 @@ if (length(api$ids) > 0) {
     readr::write_csv(pubs, "data/publications_records.csv")
 
     # import
+    pubs_molgenis <- pubmed$as_molgenis_entity(x = pubs)
     resp <- httr::POST(
-        url = paste0(
-            molgenis$host,
-            "/plugin/importwizard/importFile",
-            "?packageId=publications"
-        ),
-        body = list(
-            file = httr::upload_file("data/publications_records.csv")
-        ),
+        url = paste0(molgenis$host, "/api/v2/publications_records"),
+        body = pubs_molgenis,
         httr::add_headers(
-            `x-molgenis-token` = molgenis$token
-        )
+            `x-molgenis-token` = molgenis$token,
+            `ContentType` = "application/json"
+        ),
+        httr::content_type_json()
     )
 
     # process response
@@ -197,3 +197,9 @@ if (length(api$ids) > 0) {
     cli::cli_h2("Preview of the new data")
     print(tibble::as_tibble(pubs))
 }
+
+
+# Write other data to file
+cli::cli_alert_info("Writing entities to file...")
+readr::write_csv(queries, "data/pubdata/queries.csv")
+readr::write_csv(exclusions, "data/pubdata/exclusions.csv")

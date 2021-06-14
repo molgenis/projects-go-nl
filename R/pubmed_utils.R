@@ -222,3 +222,15 @@ pubmed$write_html <- function(file, id, html) {
     # save new output
     write(output, file)
 }
+
+
+#' Prep Data for Import
+#'
+#' Serialize data for import into molgenis directly
+#'
+#' @param x an object
+#'
+#' @export
+pubmed$as_molgenis_entity <- function(x) {
+    jsonlite::toJSON(list(entities = x), dataframe = "row")
+}
