@@ -13,7 +13,8 @@
     "recommendations": [
       "shd101wyy.markdown-preview-enhanced",
       "ikuyadeu.r",
-      "reditorsupport.r-lsp"
+      "reditorsupport.r-lsp",
+      "james-yu.latex-workshop"
     ]
   }
 }
