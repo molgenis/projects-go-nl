@@ -1,10 +1,12 @@
 <template>
   <li class="pub" :data-uid="pub.uid">
-    <p class="pub-data pub-title"><a :href="pub.doi_url">{{ pub.title }}</a></p>
+    <p class="pub-data pub-title">{{ pub.title }}</p>
     <p class="pub-data pub-authors">{{ pub.authors }}</p>
-    <p class="pub-data pub-journal">{{ pub.fulljournalname }}</p>
-    <p class="pub-data pub-date">{{ pub.sortpubdate }}</p>
-    <!-- <a class="pub-data pub-doi" :href="pub.doi_url">{{ pub.doi_url }}</a> -->
+    <div class="pub-meta">
+      <p class="pub-data pub-journal">{{ pub.fulljournalname }}</p>
+      <p class="pub-data pub-date">{{ pub.sortpubdate.split("-")[0] }}</p>
+      <a class="pub-data pub-doi" :href="pub.doi_url">{{ pub.doi_label }}</a>
+    </div>
   </li>
 </template>
 
@@ -18,44 +20,49 @@ defineProps({
 
 <style>
 .pub {
-  margin-bottom: 16px;
+  margin-bottom: 1.65em;
 }
 
 .pub .pub-data {
   color: #3f454b;
-  line-height: 1.3;
   margin: 0;
-  margin-bottom: 6px;
   font-weight: 400;
-}
-
-.pub .pub-doi {
-  color: #017ffd;
 }
 
 .pub .pub-title {
   display: block;
   color: #252525;
   line-height: 1.4;
+  margin-bottom: 8px;
+  font-size: 16pt;
 }
 
-.pub .pub-title a {
-    text-decoration: underline;
+.pub .pub-authors {
+  font-size: 14pt;
 }
 
-.pub .pub-journal::after {
-  content: "\2022";
-  margin: 0 6px;
-}
-
-.pub .pub-journal,
-.pub .pub-date {
-  display: inline;
+.pub .pub-meta {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  margin-top: 12px;
+  font-size: 11pt;
   text-transform: uppercase;
   font-size: 11pt;
   letter-spacing: 1.6px;
   font-weight: 400;
   color: #5D666F;
 }
+
+
+.pub .pub-meta p::after {
+  content: "\2022";
+  margin: 0 8px;
+}
+
+.pub .pub-meta a {
+  color: #0d65fc;
+}
+
 
 </style>
