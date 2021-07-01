@@ -1,2 +1,2 @@
-href,uid,reason,date_created
-/api/v1/publications_exclusions/33082719,33082719,"Uses the ""GONL"", but there is an organization/project with the same abbreviation",2021-06-14
+uid,reason,date_created
+33082719,"Uses the ""GONL"", but there is an organization/project with the same abbreviation",2021-06-14
