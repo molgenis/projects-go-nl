@@ -1,4 +1,4 @@
 vcfs/*.vcf
 vcfs/gzip/*.gz
 .DS_STORE
-python/_config.yml
+.env
