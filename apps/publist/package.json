@@ -1,5 +1,5 @@
 {
-  "name": "publist",
+  "name": "publications",
   "version": "0.1.0",
   "description": "View all publications associated with the GoNL Project",
   "scripts": {
