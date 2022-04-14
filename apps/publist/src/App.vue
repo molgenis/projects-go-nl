@@ -1,81 +1,43 @@
-<script setup>
-import Publication from "./components/Publication.vue";
-</script>
-
 <template>
-  <div id="publist-container">
-    <h1 class="h1">Publications</h1>
-    <p>
-      In the list below, you can view all publications associated with GoNL
-      consortium. If you would like to add you publication to this list, make
-      sure you have given suitable acknowledgement (<a
-        href="https://nlgenome.nl/api/files/aaaac5z7aijfr6qwh32jd7yaae?alt=media"
-        >GoNL Publication Acknowledgment document (PDF, 139KB)</a
-      >) and contact the GoNL consortium.
-    </p>
-    <ol v-if="pubs" class="publication-list" reversed>
-      <Publication v-for="pub in pubs" v-bind:key="pub.uid" v-bind:pub="pub" />
+  <div class="go-nl-publications col-sm-10 col-md-8 col-lg-7 m-auto">
+    <h1>Publications</h1>
+    <p>In the list below, you can view all of the publications that are affiliated with the GoNL consortium. Publications are sorted by most recent publication. If you would like to add your publication to this list, make sure you have given suitable acknowledgement. Please see the <a href="https://nlgenome.nl/api/files/aaaac5z7aijfr6qwh32jd7yaae?alt=media">GoNL Publication Acknowledgment Guide (PDF, 139KB)</a> for more information.</p>
+    <ol v-if="publications" class="publication-list" reversed>
+      <PublicationRecord
+        v-for="pub in publications"
+        :key="pub.uid"
+        :title="pub.title"
+        :authors="pub.authors"
+        :journalName="pub.fulljournalname"
+        :publicationDate="pub.sortpubdate"
+        :doiUrl="pub.doi_url"
+        :doiLabel="pub.doi_label"
+      />
     </ol>
-    <p v-else><strong>Error:</strong> {{ error }}</p>
   </div>
 </template>
 
-<style lang="scss">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  margin: 0 auto;
-  padding-top: 60px;
-  max-width: 972px;
-  min-height: 100vh;
-  font-size: 16pt;
-}
-</style>
-
 <script>
+import PublicationRecord from './components/Publication.vue'
+
 export default {
-  data: function () {
+  data () {
     return {
-      pubs: null,
-      error: null,
-    };
+      publications: []
+    }
+  },
+  components: {
+    PublicationRecord
   },
   methods: {
-    fetchData: function () {
-      fetch("https://go-nl-acc.gcc.rug.nl/api/v1/publications_records", {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          // "x-molgenis-token": "",
-        },
-      })
-        .then((response) => {
-          if (response.ok) {
-            return response.json();
-          } else {
-            throw response;
-          }
-        })
-        .then((data) => {
-          this.pubs = data.items.sort((x, y) => {
-            return new Date(y.sortpubdate) - new Date(x.sortpubdate);
-          });
-        })
-        .catch((error) => {
-          let msg = `Unable to retrieve publications at this time (${error.status}`;
-          if (error.statusText) {
-            msg = `${msg} ${error.statusText})`;
-          } else {
-            msg = `${msg})`;
-          }
-          this.error = msg;
-          console.log(error);
-        });
-    },
+    async getPublicationData () {
+      const response = await fetch('/api/v2/publications_records?sort=sortpubdate:desc')
+      const data = await response.json()
+      this.publications = data.items
+    }
   },
-  mounted: function () {
-    this.fetchData();
-  },
-};
+  mounted () {
+    this.getPublicationData()
+  }
+}
 </script>

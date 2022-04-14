@@ -1,68 +1,97 @@
 <template>
-  <li class="pub" :data-uid="pub.uid">
-    <p class="pub-data pub-title">{{ pub.title }}</p>
-    <p class="pub-data pub-authors">{{ pub.authors }}</p>
-    <div class="pub-meta">
-      <p class="pub-data pub-journal">{{ pub.fulljournalname }}</p>
-      <p class="pub-data pub-date">{{ pub.sortpubdate.split("-")[0] }}</p>
-      <a class="pub-data pub-doi" :href="pub.doi_url">{{ pub.doi_label }}</a>
+  <li class="publication-record">
+    <p class="record-data record-title">{{ title }}</p>
+    <p class="record-data record-authors">{{ authors }}</p>
+    <div class="record-metadata">
+      <p class="record-data record-journal">{{ journalName }}</p>
+      <p class="record-data record-year">{{ publicationYear }}</p>
+      <a class="record-data record-doi" :href="doiUrl">
+        {{ doiLabel ? doiLabel : doiUrl }}
+      </a>
     </div>
   </li>
 </template>
 
-<script setup>
-import { defineProps } from "vue";
-
-defineProps({
-  pub: Object
-});
+<script>
+export default {
+  name: 'PublicationRecord',
+  props: {
+    title: {
+      type: String,
+      required: true
+    },
+    authors: {
+      type: String,
+      required: true
+    },
+    journalName: {
+      type: String,
+      required: false
+    },
+    publicationDate: {
+      type: String,
+      required: false
+    },
+    doiUrl: {
+      type: String,
+      required: false
+    },
+    doiLabel: {
+      type: String,
+      required: false
+    }
+  },
+  computed: {
+    publicationYear () {
+      return this.publicationDate.split('-')[0]
+    }
+  }
+}
 </script>
 
-<style>
-.pub {
+<style lang="scss">
+.publication-record {
   margin-bottom: 1.65em;
-}
-
-.pub .pub-data {
   color: #3f454b;
-  margin: 0;
-  font-weight: 400;
+
+  .record-data {
+    margin: 0;
+    font-weight: 400;
+  }
+
+  .record-title {
+    display: block;
+    color: #252525;
+    line-height: 1.4;
+    margin-bottom: 8px;
+  }
+  
+  .record-authors {
+    font-size: 11pt;
+  }
+
+  .record-metadata {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+
+    .record-data {
+      margin-top: 4px;
+      font-size: 9pt;
+      text-transform: uppercase;
+      color: #5d666f;
+    }
+
+    p.record-data {
+      &::after {
+        content: '\2022';
+        margin: 0 6px;
+      }
+    }
+    
+    a.record-data {
+      color: #0d65fc;
+    }
+  }
 }
-
-.pub .pub-title {
-  display: block;
-  color: #252525;
-  line-height: 1.4;
-  margin-bottom: 8px;
-  font-size: 16pt;
-}
-
-.pub .pub-authors {
-  font-size: 14pt;
-}
-
-.pub .pub-meta {
-  display: flex;
-  flex-wrap: wrap;
-  flex-direction: row;
-  margin-top: 12px;
-  font-size: 11pt;
-  text-transform: uppercase;
-  font-size: 11pt;
-  letter-spacing: 1.6px;
-  font-weight: 400;
-  color: #5D666F;
-}
-
-
-.pub .pub-meta p::after {
-  content: "\2022";
-  margin: 0 8px;
-}
-
-.pub .pub-meta a {
-  color: #0d65fc;
-}
-
-
 </style>
