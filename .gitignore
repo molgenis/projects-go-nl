@@ -2,3 +2,4 @@ vcfs/*.vcf
 vcfs/gzip/*.gz
 .DS_STORE
 .env
+venv
